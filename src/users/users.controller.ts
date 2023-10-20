@@ -1,8 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Req } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { Auth } from '../iam/authentication/decorators/auth.decorator';
+import { AuthType } from '../iam/authentication/enums/auth-type.enum';
+import { Request } from 'express';
 
+@Auth(AuthType.Bearer, AuthType.ApiKey)
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
@@ -16,6 +20,14 @@ export class UsersController {
   findAll() {
     return this.usersService.findAll();
   }
+
+  @Get('me')
+  findMe(@Req() request: Request) {
+    const tokenParts = request.headers.authorization.split(' ');
+
+    return this.usersService.findMe(tokenParts[1]);
+  }
+
 
   @Get(':id')
   findOne(@Param('id') id: string) {

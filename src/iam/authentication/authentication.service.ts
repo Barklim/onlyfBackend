@@ -2,6 +2,7 @@ import { ConflictException, Inject, Injectable, UnauthorizedException } from '@n
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../../users/entities/user.entity';
 import { Repository } from 'typeorm';
+import * as jwt from 'jsonwebtoken';
 import { HashingService } from '../hashing/hashing.service';
 import { SignUpDto } from './dto/sign-up.dto/sign-up.dto';
 import { SignInDto } from './dto/sign-in.dto/sign-in.dto';
@@ -36,6 +37,7 @@ export class AuthenticationService {
       user.password = await this.hashingService.hash(signUpDto.password);
 
       await this.usersRepository.save(user);
+      return await this.generateTokens(user);
     } catch (err) {
       const pgUniqueViolationErrorCode = '23505';
       if (err.code === pgUniqueViolationErrorCode) {
@@ -71,7 +73,7 @@ export class AuthenticationService {
     return await this.generateTokens(user);
   }
 
-  async generateTokens(user: User) {
+  async generateTokens(user: User, remainingTime?: number) {
     const refreshTokenId = randomUUID();
     const [accessToken, refreshToken] = await Promise.all([
       this.signToken<Partial<ActiveUserData>>(
@@ -85,7 +87,7 @@ export class AuthenticationService {
         //   permissions: user.permissions,
         // },
       ),
-      this.signToken(user.id, this.jwtConfiguration.refreshTokenTtl,
+      this.signToken(user.id, remainingTime ? remainingTime : this.jwtConfiguration.refreshTokenTtl,
         {
           refreshTokenId,
         }),
@@ -120,7 +122,10 @@ export class AuthenticationService {
         throw new Error('Refresh token is invalid');
       }
 
-      return this.generateTokens(user);
+      const refreshTokenData = jwt.decode(refreshTokenDto.refreshToken) as { exp: number };
+      const remainingTime = refreshTokenData.exp - Math.floor(Date.now() / 1000);
+
+      return this.generateTokens(user, remainingTime);
     } catch (err) {
       if (err instanceof InvalidatedRefreshTokenError) {
         // Take action: notify user that his refresh token might have been stolen?

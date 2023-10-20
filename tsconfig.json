@@ -18,7 +18,8 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "lib": [
-      "es2021.full"
+      "es2021.full",
+      "dom"
     ]
   }
 }

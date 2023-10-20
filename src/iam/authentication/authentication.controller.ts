@@ -1,4 +1,4 @@
-import { Body, Controller, HttpCode, HttpStatus, Post, Res } from '@nestjs/common';
+import { Body, Controller, HttpCode, HttpStatus, Post, Req, Res } from '@nestjs/common';
 import { AuthenticationService } from './authentication.service';
 import { SignUpDto } from './dto/sign-up.dto/sign-up.dto';
 import { SignInDto } from './dto/sign-in.dto/sign-in.dto';
@@ -7,7 +7,7 @@ import { AuthType } from './enums/auth-type.enum';
 import { RefreshTokenDto } from '../../coffees/dto/refresh-token.dto';
 import { ActiveUser } from '../decorators/active-user.decorator';
 import { ActiveUserData } from '../interfaces/active-user-data.interface';
-import { Response } from 'express';
+import { Response, Request } from 'express';
 import { OtpAuthenticationService } from './opt-authentication/opt-authentication.service';
 import { toFileStream } from 'qrcode';
 
@@ -26,28 +26,42 @@ export class AuthenticationController {
 
   @HttpCode(HttpStatus.OK)
   @Post('sign-in')
-  signIn(@Body() signInDto: SignInDto) {
-    return this.authService.signIn(signInDto);
+  async signIn(
+    @Res({ passthrough: true }) response: Response,
+    @Body() signInDto: SignInDto
+  ) {
+    const tokens = await this.authService.signIn(signInDto);
+
+    response.cookie('refreshToken', tokens.refreshToken, {
+      httpOnly: true,
+      sameSite: true,
+      // TODO: fort postman
+      // secure: true,
+      secure: false,
+    })
+    return tokens;
   }
-  // cookies realization
-  // async signIn(
-  //   @Res({ passthrough: true }) response: Response,
-  //   @Body() signInDto: SignInDto
-  // ) {
-  //   const accessToken = await this.authService.signIn(signInDto);
-  //   response.cookie('accessToken', accessToken, {
-  //     httpOnly: true,
-  //     sameSite: true,
-  //     // TODO: fort postman
-  //     // secure: true,
-  //     secure: false,
-  //   })
-  // }
 
   @HttpCode(HttpStatus.OK)
   @Post('refresh-tokens')
-  refreshTokens(@Body() refreshTokenDto: RefreshTokenDto) {
-    return this.authService.refreshTokens(refreshTokenDto)
+  async refreshTokens(
+    @Res({ passthrough: true }) response: Response,
+    @Req() request: Request
+  ) {
+    const refreshToken = request.cookies.refreshToken;
+    const refreshTokenDto: RefreshTokenDto = {
+      refreshToken: refreshToken
+    }
+    const refreshTokens = await this.authService.refreshTokens(refreshTokenDto);
+    response.cookie('refreshToken', refreshTokens.refreshToken, {
+      httpOnly: true,
+      sameSite: true,
+      // TODO: fort postman
+      // secure: true,
+      secure: false,
+    })
+
+    return refreshTokens;
   }
 
   @Auth(AuthType.Bearer)

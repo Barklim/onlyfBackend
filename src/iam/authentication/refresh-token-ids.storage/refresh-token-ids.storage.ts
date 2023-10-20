@@ -14,6 +14,7 @@ export class RefreshTokenIdsStorage
     this.redisClient = new Redis({
       host: 'localhost', // NOTE: Use env variable here
       port: 6379
+      // password + name
     })
   }
 
