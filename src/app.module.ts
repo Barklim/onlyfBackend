@@ -6,12 +6,16 @@ import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { IamModule } from './iam/iam.module';
 import { ConfigModule } from '@nestjs/config';
+import { OnlyFansModule } from './only-fans/only-fans.module';
+import { ScrapperModule } from './scrapper/scrapper.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
     CoffeesModule,
     UsersModule,
+    OnlyFansModule,
+    ScrapperModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',
