@@ -5,7 +5,7 @@ import { ScrapperService } from './scrapper.service';
 import { CreateScrapperDto } from './dto/create-scrapper.dto';
 import { UpdateScrapperDto } from './dto/update-scrapper.dto';
 
-// TODO: authtype
+// TODO: authType
 @Auth(AuthType.None)
 @Controller('scrapper')
 export class ScrapperController {

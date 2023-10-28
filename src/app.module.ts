@@ -8,6 +8,7 @@ import { IamModule } from './iam/iam.module';
 import { ConfigModule } from '@nestjs/config';
 import { OnlyFansModule } from './only-fans/only-fans.module';
 import { ScrapperModule } from './scrapper/scrapper.module';
+import { MessagesModule } from './messages/messages.module';
 
 @Module({
   imports: [
@@ -25,7 +26,7 @@ import { ScrapperModule } from './scrapper/scrapper.module';
       database: 'postgres',
       autoLoadEntities: true,
       synchronize: true,
-    }), IamModule],
+    }), IamModule, MessagesModule],
   controllers: [AppController],
   providers: [AppService],
 })

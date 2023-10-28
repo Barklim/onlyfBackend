@@ -1,19 +1,22 @@
 import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import puppeteer from 'puppeteer';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Column, Repository } from 'typeorm';
 import { Scrapper } from '../scrapper/entities/scrapper.entity';
 import { Status } from '../scrapper/enums/scrapper.enum';
+import { Messages } from '../messages/entities/messages.entity';
 
 @Injectable()
 export class OnlyFansService {
   constructor(
     @InjectRepository(Scrapper) private readonly scrappersRepository: Repository<Scrapper>,
+    @InjectRepository(Messages) private readonly messagesRepository: Repository<Messages>,
   ){}
   // private browserInstances: Map<string, puppeteer.Browser> = new Map();
   private browserInstances: Map<string, any> = new Map();
   private maxTimeout = 2*60*1000;
-  private delayTimeout = 5000;
+  // private delayTimeout = 5000;
+  private delayTimeout = 25000;
   private typeTimeoutDelay = 500; // 1100
 
   async createBrowserInstance(id: string) {
@@ -136,6 +139,14 @@ export class OnlyFansService {
         if (scrapper.status === Status.Online && this.browserInstances.has(scrapper.id.toString())) {
           await this.closeBrowserInstance(scrapper.id.toString());
         }
+
+        if (scrapper.status === Status.Online) {
+          const scrapperBd = await this.scrappersRepository.findOneBy({
+            id: +scrapper.id,
+          })
+          scrapperBd.status = Status.Offline;
+          await this.scrappersRepository.save(scrapperBd);
+        }
       }));
     } catch (err) {
       throw new HttpException(err, HttpStatus.CONFLICT);
@@ -170,7 +181,11 @@ export class OnlyFansService {
 
     scrapper.status = Status.Online;
     await this.scrappersRepository.save(scrapper);
-    
+
+    // const URL = 'https://main--sprightly-toffee-821aa4.netlify.app/'
+    // const URL = 'https://example.com'
+    // const URL = 'https://23oct.zetfix.online/'
+    // const URL = 'https://vk.com'
     const URL = 'https://onlyfans.com/'
 
     const browser = this.browserInstances.get(id);
@@ -211,7 +226,54 @@ export class OnlyFansService {
             console.log('contentType: application/json');
             // https://onlyfans.com/api2/v2/users/list?a[]=15585607&a[]=108013309&a[]=234122322
             const jsonResponse = await response.json();
-            console.log('JSON Response:', jsonResponse);
+            // console.log('JSON Response:', jsonResponse);
+
+            if (URL.includes('https://onlyfans.com/api2/v2/chats')) {
+              const unreadChats = this.getUnreadChats(jsonResponse);
+
+              // console.log('!!! unreadChats');
+              // console.log(unreadChats);
+              // console.log('!!!');
+
+              for (let unreadChat of unreadChats) {
+                const chat = await this.messagesRepository.findOneBy({
+                  chatId: unreadChat.chatId,
+                })
+                const DateNow = new Date();
+                const inputTime = new Date(unreadChat.createdAt);
+                // TODO: get time from settings
+                // const newTime = inputTime.setMinutes(inputTime.getMinutes() + 1);
+                inputTime.setMinutes(inputTime.getMinutes() + 1);
+                // console.log(DateNow < inputTime);
+                // console.log(unreadChat.createdAt);
+                // console.log(DateNow);
+                // console.log(inputTime);
+                // console.log('!!!');
+                if (chat) {
+                  // console.log('!!! 1111');
+                  // console.log(chat);
+                  // console.log(unreadChat);
+                  // console.log('!!!');
+                  await this.messagesRepository.update({ chatId: unreadChat.chatId }, {
+                    createdAt: unreadChat.createdAt
+                  })
+                } else {
+                  // console.log('!!! 2222');
+                  // console.log(unreadChat);
+                  // console.log('!!!');
+                  const newChat = new Messages();
+                  newChat.userId = id;
+                  newChat.chatId = unreadChat.chatId;
+                  newChat.createdAt = unreadChat.createdAt;
+                  newChat.text = unreadChat.text;
+                  newChat.counted = false;
+                  await this.messagesRepository.save(newChat);
+                }
+                // await this.unreadMessagesRepository.update({ chatId: unreadChat.chatId }, {
+                //   createdAt: unreadChat.createdAt
+                // });
+              }
+            }
           }
 
           // text/javascript text/html text/plain
@@ -237,13 +299,19 @@ export class OnlyFansService {
       await page.waitForSelector('[type="submit"]');
       page.click('[type="submit"]')
 
-      await page.waitForSelector('[data-name="Chats"]', { visible: true, timeout: this.maxTimeout });
-      await this.delay(this.delayTimeout);
-      page.click('[data-name="Chats"]')
+      // await page.waitForSelector('[data-name="Chats"]', { visible: true, timeout: this.maxTimeout });
+      // await this.delay(this.delayTimeout);
+      // page.click('[data-name="Chats"]')
 
-      await page.waitForSelector('[data-name="Collections"]', { visible: true, timeout: this.maxTimeout });
-      await this.delay(this.delayTimeout);
-      page.click('[data-name="Collections"]')
+      for (let i = 0; i < 100; i++) {
+        await page.waitForSelector('[data-name="Chats"]', { visible: true, timeout: this.maxTimeout });
+        await this.delay(this.delayTimeout);
+        page.click('[data-name="Chats"]')
+      }
+
+      // await page.waitForSelector('[data-name="Collections"]', { visible: true, timeout: this.maxTimeout });
+      // await this.delay(this.delayTimeout);
+      // page.click('[data-name="Collections"]')
 
     } catch (error) {
       await this.closeBrowserInstance(id);
@@ -266,5 +334,19 @@ export class OnlyFansService {
 
   delay(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  getUnreadChats(data): Array<Pick<Messages, 'chatId' | 'createdAt' | 'text'>> {
+    let unreadChats: Array<Pick<Messages, 'chatId' | 'createdAt' | 'text'>> = [];
+    data["list"]?.forEach(chat => {
+      if (chat['messagesCount'] > 0 && !chat['isMutedNotifications']) {
+        unreadChats.push({
+          chatId: chat['withUser']['id'],
+          createdAt: chat['lastMessage']['createdAt'],
+          text: chat['lastMessage']['text']
+        })
+      }
+    })
+    return unreadChats;
   }
 }
