@@ -9,10 +9,14 @@ import { ConfigModule } from '@nestjs/config';
 import { OnlyFansModule } from './only-fans/only-fans.module';
 import { ScrapperModule } from './scrapper/scrapper.module';
 import { MessagesModule } from './messages/messages.module';
+import { ScheduleModule } from '@nestjs/schedule';
+import { ScheduleModule as SchedulerModule } from './schedule/schedule.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
+    ScheduleModule.forRoot(),
+    SchedulerModule,
     CoffeesModule,
     UsersModule,
     OnlyFansModule,
@@ -26,7 +30,7 @@ import { MessagesModule } from './messages/messages.module';
       database: 'postgres',
       autoLoadEntities: true,
       synchronize: true,
-    }), IamModule, MessagesModule],
+    }), IamModule, MessagesModule, ScheduleModule],
   controllers: [AppController],
   providers: [AppService],
 })

@@ -11,7 +11,6 @@ export class MessagesService {
     @InjectRepository(Message) private readonly messagesRepository: Repository<Message>,
   ){}
 
-
   async createOne(id: string, createMessageDto: CreateMessageDto) {
     try {
       const message = new Message();

@@ -26,3 +26,7 @@ npm i -D @types/puppeteer
 [link](https://www.youtube.com/watch?v=URGkzNC-Nwo&list=PLuJJZ-W1NwdqgvE0D-1SMS7EpWIC5cKqu&index=1)
 
 generate scrapper, messages
+
+nest g module schedule
+nest g service schedule
+nest g controller schedule
