@@ -4,13 +4,13 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Column, Repository } from 'typeorm';
 import { Scrapper } from '../scrapper/entities/scrapper.entity';
 import { Status } from '../scrapper/enums/scrapper.enum';
-import { Messages } from '../messages/entities/messages.entity';
+import { Message } from '../messages/entities/message.entity';
 
 @Injectable()
 export class OnlyFansService {
   constructor(
     @InjectRepository(Scrapper) private readonly scrappersRepository: Repository<Scrapper>,
-    @InjectRepository(Messages) private readonly messagesRepository: Repository<Messages>,
+    @InjectRepository(Message) private readonly messagesRepository: Repository<Message>,
   ){}
   // private browserInstances: Map<string, puppeteer.Browser> = new Map();
   private browserInstances: Map<string, any> = new Map();
@@ -240,10 +240,10 @@ export class OnlyFansService {
                   chatId: unreadChat.chatId,
                 })
                 const DateNow = new Date();
-                const inputTime = new Date(unreadChat.createdAt);
+                // const inputTime = new Date(unreadChat.createdAt);
                 // TODO: get time from settings
                 // const newTime = inputTime.setMinutes(inputTime.getMinutes() + 1);
-                inputTime.setMinutes(inputTime.getMinutes() + 1);
+                // inputTime.setMinutes(inputTime.getMinutes() + 1);
                 // console.log(DateNow < inputTime);
                 // console.log(unreadChat.createdAt);
                 // console.log(DateNow);
@@ -254,17 +254,17 @@ export class OnlyFansService {
                   // console.log(chat);
                   // console.log(unreadChat);
                   // console.log('!!!');
-                  await this.messagesRepository.update({ chatId: unreadChat.chatId }, {
-                    createdAt: unreadChat.createdAt
-                  })
+                  // await this.messagesRepository.update({ chatId: unreadChat.chatId }, {
+                  //   createdAt: unreadChat.createdAt
+                  // })
                 } else {
                   // console.log('!!! 2222');
                   // console.log(unreadChat);
                   // console.log('!!!');
-                  const newChat = new Messages();
-                  newChat.userId = id;
+                  const newChat = new Message();
+                  // newChat.userId = id;
                   newChat.chatId = unreadChat.chatId;
-                  newChat.createdAt = unreadChat.createdAt;
+                  // newChat.created_at = unreadChat.created_at;
                   newChat.text = unreadChat.text;
                   newChat.counted = false;
                   await this.messagesRepository.save(newChat);
@@ -336,15 +336,15 @@ export class OnlyFansService {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
-  getUnreadChats(data): Array<Pick<Messages, 'chatId' | 'createdAt' | 'text'>> {
-    let unreadChats: Array<Pick<Messages, 'chatId' | 'createdAt' | 'text'>> = [];
+  getUnreadChats(data): Array<Pick<Message, 'chatId' | 'created_at' | 'text'>> {
+    let unreadChats: Array<Pick<Message, 'chatId' | 'created_at' | 'text'>> = [];
     data["list"]?.forEach(chat => {
       if (chat['messagesCount'] > 0 && !chat['isMutedNotifications']) {
-        unreadChats.push({
-          chatId: chat['withUser']['id'],
-          createdAt: chat['lastMessage']['createdAt'],
-          text: chat['lastMessage']['text']
-        })
+        // unreadChats.push({
+        //   chatId: chat['withUser']['id'],
+        //   createdAt: chat['lastMessage']['createdAt'],
+        //   text: chat['lastMessage']['text']
+        // })
       }
     })
     return unreadChats;

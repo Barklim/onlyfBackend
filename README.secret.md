@@ -157,4 +157,25 @@ await get("ScrapperRepository").update({ id: 5 }, { status: 'offline' })
 await get("UnreadMessagesRepository").find()
 await get("UnreadMessagesRepository").delete({ id: 2 })
 
+await get("MessageRepository").find()
+await get("MessageRepository").delete({ id: 3 })
+
 зашифровать пароли для кредов
+user/me - это в хедере User-Id:
+112299545
+
+
+changedAt:"2023-10-27T02:04:46+00:00"
+createdAt: "2023-10-27T02:04:46+00:00"
+fromUser.id = 112299545
+
+
+// id чата 122754683
+https://onlyfans.com/api2/v2/chats/122754683/messages?limit=10&order=desc&skip_users=all&id=2119526509867
+https://onlyfans.com/api2/v2/chats/122754683/messages?limit=10&order=desc&skip_users=all&id=2111525050392
+
+по чатам такое апи
+https://onlyfans.com/api2/v2/chats?limit=10&offset=0&skip_users=all&order=recent
+list.lastMessage
+list.lastReadMessageId
+list.unreadMessagesCount
