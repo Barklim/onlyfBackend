@@ -14,6 +14,12 @@ export class User {
   @Column({ nullable: true })
   password: string;
 
+  @Column({ nullable: true , default: null})
+  agencyId: number | null;
+
+  @Column({ nullable: true , default: null})
+  invitedTo: number | null;
+
   @Column({ enum: Role, default: Role.Regular })
   role: Role;
 

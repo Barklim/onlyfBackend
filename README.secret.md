@@ -106,6 +106,7 @@ launched when specified URL opened in tab
 ## todo
 
 https://fansmetric.com/
+onlyfans ui
 kliment.barkalov1@gmail.com
 samaca-ludu-rajewa
 //
@@ -159,6 +160,12 @@ await get("UnreadMessagesRepository").delete({ id: 2 })
 
 await get("MessageRepository").find()
 await get("MessageRepository").delete({ id: 3 })
+
+await get("AgencyRepository").delete({ id: 3 })
+await get("AgencyRepository").find({ id: 12})
+
+await get("UserRepository").find({ id: 79})
+await getCustomRepository(UserRepository).clear();
 
 зашифровать пароли для кредов
 user/me - это в хедере User-Id:

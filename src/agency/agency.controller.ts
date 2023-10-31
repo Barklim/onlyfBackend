@@ -1,10 +1,11 @@
-import { Body, Controller, Get, Param, Patch, Post, Req } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Req } from '@nestjs/common';
 import { AgencyService } from './agency.service';
 import { Request } from 'express';
 import { Auth } from '../iam/authentication/decorators/auth.decorator';
 import { AuthType } from '../iam/authentication/enums/auth-type.enum';
 import { CreateAgencyDto } from './dto/create-agency.dto';
 import { UpdateAgencyDto } from './dto/update-agency.dto';
+import { InviteAgencyDto } from './dto/invite-agency.dto';
 
 @Auth(AuthType.Bearer, AuthType.ApiKey)
 @Controller('agency')
@@ -35,5 +36,26 @@ export class AgencyController {
     const tokenParts = request.headers.authorization.split(' ');
 
     return this.agencyService.update(tokenParts[1], updateAgencyDto);
+  }
+
+  @Post('invite')
+  invite(@Req() request: Request, @Body() inviteAgencyDto: InviteAgencyDto) {
+    const tokenParts = request.headers.authorization.split(' ');
+
+    return this.agencyService.inviteAgency(tokenParts[1], inviteAgencyDto);
+  }
+
+  @Get('acceptinvitation')
+  async acceptInvite(@Req() request: Request) {
+    const tokenParts = request.headers.authorization.split(' ');
+
+    return this.agencyService.acceptInvite(tokenParts[1]);
+  }
+
+  @Delete(':id')
+  async remove(@Req() request: Request, @Param('id') id: string) {
+    const tokenParts = request.headers.authorization.split(' ');
+
+    return this.agencyService.remove(tokenParts[1], Number(id));
   }
 }

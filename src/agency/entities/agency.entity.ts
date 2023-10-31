@@ -1,5 +1,5 @@
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { Plan } from '../enums/agency.enum';
+import { Invite, Plan } from '../enums/agency.enum';
 
 @Entity()
 export class Agency {
@@ -21,14 +21,17 @@ export class Agency {
   @Column({default: ''})
   stopWords: string;
 
-  @Column('text', { array: true, default: [] })
-  admins: string[];
+  @Column('jsonb', { default: [] })
+  invites: Invite[];
 
-  @Column('text', { array: true, default: [] })
-  managers: string[];
+  @Column('integer', { array: true, default: [] })
+  admins: number[];
 
-  @Column('text', { array: true, default: [] })
-  models: string[];
+  @Column('integer', { array: true, default: [] })
+  managers: number[];
+
+  @Column('integer', { array: true, default: [] })
+  models: number[];
 
   @Column({default: false})
   verified: boolean;
