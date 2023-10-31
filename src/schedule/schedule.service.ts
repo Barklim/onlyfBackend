@@ -10,27 +10,25 @@ export class ScheduleService {
     @InjectRepository(Message) private readonly messagesRepository: Repository<Message>,
   ){}
 
-  @Cron('*/5 * * * * *')
+  @Cron('*/60 * * * * *')
   async handleCron() {
     console.log('!!! chron');
 
     const currentTime = new Date();
-
     const fiveMinutes = 10*60*1000;
-
-    const existingMessages = await this.messagesRepository.find();
+    const messages = await this.messagesRepository.find();
 
     // We filter messages, leaving only those whose msg_created_at is less than the current time plus x minutes
-    const filteredMessages = existingMessages.filter((message) => {
+    const filteredMessages = messages.filter((message) => {
       const msgCreatedAt = new Date(message.msg_created_at);
       const test = new Date(currentTime.getTime() - fiveMinutes)
       // console.log(msgCreatedAt);
       // console.log(test);
-      // if (message.id === 40) {
-      //   console.log(msgCreatedAt < new Date(currentTime.getTime() - fiveMinutes));
-      //   console.log(msgCreatedAt);
-      //   console.log(test);
-      // }
+      if (message.id === 40) {
+        console.log(msgCreatedAt < new Date(currentTime.getTime() - fiveMinutes));
+        console.log(msgCreatedAt);
+        console.log(test);
+      }
 
       return msgCreatedAt < new Date(currentTime.getTime() - fiveMinutes);
     });

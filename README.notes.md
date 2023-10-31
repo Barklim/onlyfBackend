@@ -30,3 +30,7 @@ generate scrapper, messages
 nest g module schedule
 nest g service schedule
 nest g controller schedule
+
+nest g module agency
+nest g service agency
+nest g controller agency

@@ -11,6 +11,7 @@ import { ScrapperModule } from './scrapper/scrapper.module';
 import { MessagesModule } from './messages/messages.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { ScheduleModule as SchedulerModule } from './schedule/schedule.module';
+import { AgencyModule } from './agency/agency.module';
 
 @Module({
   imports: [
@@ -30,7 +31,7 @@ import { ScheduleModule as SchedulerModule } from './schedule/schedule.module';
       database: 'postgres',
       autoLoadEntities: true,
       synchronize: true,
-    }), IamModule, MessagesModule, ScheduleModule],
+    }), IamModule, MessagesModule, ScheduleModule, AgencyModule],
   controllers: [AppController],
   providers: [AppService],
 })
