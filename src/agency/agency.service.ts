@@ -9,12 +9,14 @@ import { UpdateAgencyDto } from './dto/update-agency.dto';
 import { Invite, Plan } from './enums/agency.enum';
 import { Role } from '../users/enums/role.enum';
 import { InviteAgencyDto } from './dto/invite-agency.dto';
+import { NotificationService } from '../notification/notification.service';
 
 @Injectable()
 export class AgencyService {
   constructor(
     @InjectRepository(User) private readonly usersRepository: Repository<User>,
     @InjectRepository(Agency) private readonly agenciesRepository: Repository<Agency>,
+    private notificationService: NotificationService,
   ){}
 
   async findMe(token: string) {
@@ -142,16 +144,21 @@ export class AgencyService {
             role: inviteAgencyDto.role,
             accepted: false
           } as Invite;
+
+          if (inviteObj.role === Role.SuperUser) {
+            throw new ConflictException('Impossible operation');
+          }
           agency.invites.push(inviteObj);
 
           return await this.agenciesRepository.save(agency).then(
             async (data) => {
 
-              const user = await this.usersRepository.findOneBy({
+              const dstUser = await this.usersRepository.findOneBy({
                 id: inviteAgencyDto.id,
               })
-              user.invitedTo = agency.id;
-              this.usersRepository.save(user);
+              dstUser.invitedTo = agency.id;
+              await this.usersRepository.save(dstUser);
+              await this.notificationService.OnSentInvite(user, inviteObj, agency)
 
               return data;
             }
@@ -217,7 +224,7 @@ export class AgencyService {
               })
               user.invitedTo = null;
               user.role = Role.Regular
-              this.usersRepository.save(user);
+              await this.usersRepository.save(user);
 
               return data;
             }
@@ -290,6 +297,7 @@ export class AgencyService {
 
                 user.role = existingInvite.role;
                 await this.usersRepository.save(user);
+                await this.notificationService.OnAcceptInvite(user, existingInvite, agency)
 
                 return data;
               }

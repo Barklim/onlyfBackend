@@ -12,6 +12,7 @@ import { MessagesModule } from './messages/messages.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { ScheduleModule as SchedulerModule } from './schedule/schedule.module';
 import { AgencyModule } from './agency/agency.module';
+import { NotificationModule } from './notification/notification.module';
 
 @Module({
   imports: [
@@ -31,7 +32,7 @@ import { AgencyModule } from './agency/agency.module';
       database: 'postgres',
       autoLoadEntities: true,
       synchronize: true,
-    }), IamModule, MessagesModule, ScheduleModule, AgencyModule],
+    }), IamModule, MessagesModule, ScheduleModule, AgencyModule, NotificationModule],
   controllers: [AppController],
   providers: [AppService],
 })

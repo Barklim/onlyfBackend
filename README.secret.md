@@ -107,6 +107,12 @@ launched when specified URL opened in tab
 
 https://fansmetric.com/
 onlyfans ui
+/api/...
+errors, by notifications
+so many notifications services
+проверить разрешения настройек по отправке уведомлений
+добавить метод для публикации инфо уведомлений.
+//
 kliment.barkalov1@gmail.com
 samaca-ludu-rajewa
 //
@@ -153,19 +159,25 @@ x-bc e869127d6a4d4e3035fb9e1ad6d12555ab6c59f0
 redisClient
 
 npm run start -- --entryFile repl
+
+await getCustomRepository(UserRepository).clear();
+await get("UserRepository").findOne({ where: { id: 90 }})
+await get("UserRepository").update({ id:  91 }, { role: 'superuser' })
+
 await get("ScrapperRepository").find()
 await get("ScrapperRepository").update({ id: 5 }, { status: 'offline' })
 await get("UnreadMessagesRepository").find()
 await get("UnreadMessagesRepository").delete({ id: 2 })
 
 await get("MessageRepository").find()
+await get("MessageRepository").find({ id: 40  })
 await get("MessageRepository").delete({ id: 3 })
 
-await get("AgencyRepository").delete({ id: 3 })
-await get("AgencyRepository").find({ id: 12})
+await get("AgencyRepository").delete({ id: 13 })
+await get("AgencyRepository").find()
 
-await get("UserRepository").find({ id: 79})
-await getCustomRepository(UserRepository).clear();
+await get("NotificationRepository").find()
+await get("NotificationRepository").clear();
 
 зашифровать пароли для кредов
 user/me - это в хедере User-Id:

@@ -3,6 +3,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
+import { Notification } from '../notification/entities/notification.entity';
 import { Repository } from 'typeorm';
 import jwtConfig from '../iam/config/jwt.config';
 import { ConfigType } from '@nestjs/config';
@@ -11,7 +12,7 @@ import * as jwt from 'jsonwebtoken';
 @Injectable()
 export class UsersService {
   constructor(
-    @InjectRepository(User) private readonly usersRepository: Repository<User>,
+    @InjectRepository(User) private readonly usersRepository: Repository<User>
   ){}
 
   create(createUserDto: CreateUserDto) {
@@ -23,11 +24,11 @@ export class UsersService {
   }
 
   async findMe(token: string) {
-    const refreshTokenData = jwt.decode(token) as { email: string };
+    const refreshTokenData = jwt.decode(token) as any;
     const email = refreshTokenData.email;
     const user = await this.usersRepository.findOneBy({
       email: email,
-    })
+    });
     return user;
   }
 

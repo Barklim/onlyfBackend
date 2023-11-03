@@ -26,10 +26,17 @@ import { ApiKeyGuard } from './authentication/guards/api-key.guard';
 import { GoogleAuthenticationService } from './authentication/social/google-authentication.service';
 import { GoogleAuthenticationController } from './authentication/social/google-authentication.controller';
 import { OtpAuthenticationService } from './authentication/opt-authentication/opt-authentication.service';
+import { NotificationService } from '../notification/notification.service';
+import { Notification } from '../notification/entities/notification.entity';
+import { SUserNotifications } from '../notification/helpers/notification.suser';
+import { AllNotifications } from '../notification/helpers/notification.all';
+import { SendNotifications } from '../notification/helpers/notification.send';
+import { AdminNotifications } from '../notification/helpers/notification.admin';
+import { ManagerNotifications } from '../notification/helpers/notification.manager';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User, ApiKey]),
+    TypeOrmModule.forFeature([User, ApiKey, Notification]),
     JwtModule.registerAsync(jwtConfig.asProvider()),
     ConfigModule.forFeature(jwtConfig),
   ],
@@ -53,6 +60,12 @@ import { OtpAuthenticationService } from './authentication/opt-authentication/op
     ApiKeysService,
     GoogleAuthenticationService,
     OtpAuthenticationService,
+    NotificationService,
+    SUserNotifications,
+    AllNotifications,
+    SendNotifications,
+    AdminNotifications,
+    ManagerNotifications,
     // PolicyHandlerStorage,
     // FrameworkContributorPolicyHandler,
   ],

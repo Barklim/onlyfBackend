@@ -17,6 +17,7 @@ import {
   RefreshTokenIdsStorage,
 } from './refresh-token-ids.storage/refresh-token-ids.storage';
 import { OtpAuthenticationService } from './opt-authentication/opt-authentication.service';
+import { NotificationService } from '../../notification/notification.service';
 
 @Injectable()
 export class AuthenticationService {
@@ -28,6 +29,7 @@ export class AuthenticationService {
     private readonly jwtConfiguration: ConfigType<typeof jwtConfig>,
     private readonly refreshTokenIdsStorage: RefreshTokenIdsStorage,
     private readonly otpAuthService: OtpAuthenticationService,
+    private notificationService: NotificationService,
   ){}
 
   async signUp(signUpDto: SignUpDto) {
@@ -36,7 +38,11 @@ export class AuthenticationService {
       user.email = signUpDto.email;
       user.password = await this.hashingService.hash(signUpDto.password);
 
-      await this.usersRepository.save(user);
+      await this.usersRepository.save(user).then(
+        async (data) => {
+          await this.notificationService.OnSignUp(data.id)
+          return await this.generateTokens(user);
+      });
       return await this.generateTokens(user);
     } catch (err) {
       const pgUniqueViolationErrorCode = '23505';

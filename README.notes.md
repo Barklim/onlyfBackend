@@ -34,3 +34,8 @@ nest g controller schedule
 nest g module agency
 nest g service agency
 nest g controller agency
+
+nest g module notification
+nest g service notification
+nest g controller notification
+

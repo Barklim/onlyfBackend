@@ -2,5 +2,6 @@ export enum Role {
   Regular = 'regular',
   Admin = 'admin',
   Manager = 'manager',
-  Model = 'model'
+  Model = 'model',
+  SuperUser = 'superuser'
 }

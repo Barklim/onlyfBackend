@@ -2,6 +2,7 @@ import { Column, Entity, JoinTable, OneToMany, PrimaryGeneratedColumn } from 'ty
 import { Role } from '../enums/role.enum';
 import { Permission, PermissionType } from '../../iam/authorization/permission.type';
 import { ApiKey } from '../api-keys/entities/api-key.entity/api-key.entity';
+import { NotificationsSettings, NotificationsSource, NotificationsType, TUserSettings } from '../enums/user.settings';
 
 @Entity()
 export class User {
@@ -41,4 +42,23 @@ export class User {
   // two different approaches to authorization.
   @Column({ enum: Permission, default: [], type: 'json' })
   permissions: PermissionType[];
+
+  @Column('jsonb', {
+    default: {
+      notifications: {
+        [NotificationsType.EMAIL]: {
+          [NotificationsSource.COMMENTS]: true,
+          [NotificationsSource.EVENTS]: true,
+          [NotificationsSource.INFO]: true,
+        },
+        [NotificationsType.PUSH]: {
+          [NotificationsSource.COMMENTS]: true,
+          [NotificationsSource.EVENTS]: true,
+          [NotificationsSource.INFO]: true,
+        },
+      },
+    } as TUserSettings,
+  })
+  settings: TUserSettings;
+
 }
