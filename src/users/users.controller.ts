@@ -5,6 +5,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { Auth } from '../iam/authentication/decorators/auth.decorator';
 import { AuthType } from '../iam/authentication/enums/auth-type.enum';
 import { Request } from 'express';
+import { UpdateNotificationsRequestData } from '../notification/dto/update-notifications.dto';
 
 @Auth(AuthType.Bearer, AuthType.ApiKey)
 @Controller('users')
@@ -28,6 +29,12 @@ export class UsersController {
     return this.usersService.findMe(tokenParts[1]);
   }
 
+  @Post('settings/notifications')
+  setNotificationsSettings(@Req() request: Request, @Body() settingsData: UpdateNotificationsRequestData) {
+    const tokenParts = request.headers.authorization.split(' ');
+
+    return this.usersService.setNotificationsSettings(tokenParts[1], settingsData);
+  }
 
   @Get(':id')
   findOne(@Param('id') id: string) {

@@ -8,13 +8,16 @@ import { Role } from '../../users/enums/role.enum';
 import { ConfigService } from '@nestjs/config';
 import { Invite } from '../../agency/enums/agency.enum';
 import { Agency } from '../../agency/entities/agency.entity';
+import { EmailService } from '../../email/email.service';
 
 @Injectable()
 export class SUserNotifications {
+  private eventData: any = {};
   constructor(
     @InjectRepository(User) private readonly usersRepository: Repository<User>,
     private readonly configService: ConfigService,
     private readonly sendNotifications: SendNotifications,
+    private readonly emailService: EmailService,
   ){}
 
   private GetServerUri() {
@@ -31,6 +34,7 @@ export class SUserNotifications {
       const text = `Some user registered with email: ${emailLink}.`;
 
       await this.sendNotifications.createNotification(superUser.id, 'User signup', text, NotificationType.COMMON);
+      // await this.emailService.sendNotificationMail(superUser, 'User signup', text, this.eventData, NotificationType.COMMON)
     }
   }
 
@@ -45,6 +49,7 @@ export class SUserNotifications {
 
     for (const sUser of superUsers) {
       await this.sendNotifications.createNotification(sUser.id, 'Invitation user by user', text, NotificationType.COMMON);
+      // await this.emailService.sendNotificationMail(sUser, 'Invitation user by user', text, this.eventData, NotificationType.COMMON)
     }
   }
 
@@ -58,6 +63,7 @@ export class SUserNotifications {
 
     for (const sUser of superUsers) {
       await this.sendNotifications.createNotification(sUser.id, 'Invitation accept', text, NotificationType.COMMON);
+      // await this.emailService.sendNotificationMail(sUser, 'Invitation accept', text, this.eventData, NotificationType.COMMON)
     }
   }
 }

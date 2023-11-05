@@ -3,11 +3,13 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Notification } from './entities/notification.entity';
 import { User } from '../users/entities/user.entity';
-import { GetNotificationsCountResponseData } from './type/notification.response';
 import { AllNotifications } from './helpers/notification.all';
 import { SUserNotifications } from './helpers/notification.suser';
 import { Invite } from '../agency/enums/agency.enum';
 import { Agency } from '../agency/entities/agency.entity';
+import { GetNotificationsCountResponseData } from './dto/get-count.dto';
+import { EmailService } from '../email/email.service';
+import { NotificationType } from './enums/notification.enum';
 
 @Injectable()
 export class NotificationService {
@@ -61,7 +63,7 @@ export class NotificationService {
       dstUserId: dstUserId
     })
     notification.isDelete = true;
-    return  await this.notificationsRepository.save(notification);
+    return await this.notificationsRepository.save(notification);
   }
 
   async OnSignUp(dstUserId: number) {

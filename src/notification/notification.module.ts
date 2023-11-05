@@ -10,6 +10,7 @@ import { AllNotifications } from './helpers/notification.all';
 import { SendNotifications } from './helpers/notification.send';
 import { SUserNotifications } from './helpers/notification.suser';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { EmailService } from '../email/email.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Notification, User]), ConfigModule.forRoot()],
@@ -20,6 +21,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     AllNotifications,
     AdminNotifications,
     ManagerNotifications,
+    EmailService,
     ConfigService
   ],
   controllers: [NotificationController]

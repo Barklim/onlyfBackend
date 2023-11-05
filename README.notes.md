@@ -5,6 +5,11 @@
 - [Puppeteer-nest](https://www.npmjs.com/package/nest-puppeteer)
 - [redis-ttl](https://github.com/redis/ioredis/blob/HEAD/examples/ttl.js)
 - [notes](https://github.com/Barklim/auth-nestjs/blob/main/Readme.notes.md)
+- smtp
+    - [smtp gmail](https://www.youtube.com/watch?v=fN25fMQZ2v0&ab_channel=UlbiTV)
+    - [smtp sendgrid](https://www.youtube.com/watch?v=MFuqPVCiW7A&ab_channel=NaveenBommidiTechSeeker)
+    - [smtp google article](https://blog.iamstarcode.com/how-to-send-emails-using-nestjs-nodemailer-smtp-gmail-and-oauth2)
+    - [slash issue](https://www.youtube.com/watch?v=k-6KFSnaFTU&ab_channel=ProgrammingInBlood)
 
 ## Commands [link](https://www.youtube.com/watch?v=UN-yK0F38Sg)
 
@@ -39,3 +44,6 @@ nest g module notification
 nest g service notification
 nest g controller notification
 
+nest g module email
+nest g service email
+nest g controller email

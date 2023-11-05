@@ -33,6 +33,7 @@ import { AllNotifications } from '../notification/helpers/notification.all';
 import { SendNotifications } from '../notification/helpers/notification.send';
 import { AdminNotifications } from '../notification/helpers/notification.admin';
 import { ManagerNotifications } from '../notification/helpers/notification.manager';
+import { EmailService } from '../email/email.service';
 
 @Module({
   imports: [
@@ -66,6 +67,7 @@ import { ManagerNotifications } from '../notification/helpers/notification.manag
     SendNotifications,
     AdminNotifications,
     ManagerNotifications,
+    EmailService,
     // PolicyHandlerStorage,
     // FrameworkContributorPolicyHandler,
   ],

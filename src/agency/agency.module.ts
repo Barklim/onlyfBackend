@@ -12,6 +12,7 @@ import { AdminNotifications } from '../notification/helpers/notification.admin';
 import { ManagerNotifications } from '../notification/helpers/notification.manager';
 import { Notification } from '../notification/entities/notification.entity';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { EmailService } from '../email/email.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([User, Agency, Notification]), ConfigModule.forRoot()],
@@ -23,7 +24,9 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     AllNotifications,
     SendNotifications,
     AdminNotifications,
-    ManagerNotifications,],
+    ManagerNotifications,
+    EmailService
+  ],
   controllers: [AgencyController]
 })
 export class AgencyModule {}
