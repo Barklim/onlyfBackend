@@ -47,3 +47,14 @@ nest g controller notification
 nest g module email
 nest g service email
 nest g controller email
+
+[link](https://www.youtube.com/watch?v=COLDiMlmcoI&ab_channel=Letsbuildtogether)
+
+nest g module telegram
+nest g service telegram
+nest g controller telegram
+
+1. Создается бот в BotFather чате
+2. Пишешь созданному боту @userinfobot
+3. Кликаешь на это сообщение и тебя редиректит в некоторый чат, где можно получить id данного бота
+4. Данный id, можно использовать для рассылки уведомлений

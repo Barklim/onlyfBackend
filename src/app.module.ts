@@ -15,6 +15,7 @@ import { AgencyModule } from './agency/agency.module';
 import { NotificationModule } from './notification/notification.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { EmailModule } from './email/email.module';
+import { TelegramModule } from './telegram/telegram.module';
 
 @Module({
   imports: [
@@ -37,7 +38,7 @@ import { EmailModule } from './email/email.module';
       database: 'postgres',
       autoLoadEntities: true,
       synchronize: true,
-    }), IamModule, MessagesModule, ScheduleModule, AgencyModule, NotificationModule, EmailModule],
+    }), IamModule, MessagesModule, ScheduleModule, AgencyModule, NotificationModule, EmailModule, TelegramModule],
   controllers: [AppController],
   providers: [AppService],
 })

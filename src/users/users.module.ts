@@ -13,6 +13,7 @@ import { SendNotifications } from '../notification/helpers/notification.send';
 import { SUserNotifications } from '../notification/helpers/notification.suser';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { EmailService } from '../email/email.service';
+import { TelegramService } from '../telegram/telegram.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([User, ApiKey, Notification]), ConfigModule.forRoot()],
@@ -26,6 +27,7 @@ import { EmailService } from '../email/email.service';
     AdminNotifications,
     ManagerNotifications,
     EmailService,
+    TelegramService,
     ConfigService
   ],
 })

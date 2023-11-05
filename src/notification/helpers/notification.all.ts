@@ -10,6 +10,7 @@ import { ConfigService } from '@nestjs/config';
 import { Invite } from '../../agency/enums/agency.enum';
 import { Agency } from '../../agency/entities/agency.entity';
 import { EmailService } from '../../email/email.service';
+import { TelegramService } from '../../telegram/telegram.service';
 
 @Injectable()
 export class AllNotifications {
@@ -19,7 +20,7 @@ export class AllNotifications {
     private readonly configService: ConfigService,
     private readonly managerNotifications: ManagerNotifications,
     private readonly sendNotifications: SendNotifications,
-    private readonly emailService: EmailService,
+    private readonly emailService: EmailService
   ){}
 
   private GetServerUri() {

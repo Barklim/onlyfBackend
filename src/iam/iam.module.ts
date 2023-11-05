@@ -34,6 +34,7 @@ import { SendNotifications } from '../notification/helpers/notification.send';
 import { AdminNotifications } from '../notification/helpers/notification.admin';
 import { ManagerNotifications } from '../notification/helpers/notification.manager';
 import { EmailService } from '../email/email.service';
+import { TelegramService } from '../telegram/telegram.service';
 
 @Module({
   imports: [
@@ -68,6 +69,7 @@ import { EmailService } from '../email/email.service';
     AdminNotifications,
     ManagerNotifications,
     EmailService,
+    TelegramService,
     // PolicyHandlerStorage,
     // FrameworkContributorPolicyHandler,
   ],

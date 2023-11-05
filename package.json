@@ -36,6 +36,7 @@
     "google-auth-library": "^9.0.0",
     "googleapis": "^128.0.0",
     "ioredis": "^5.3.2",
+    "node-telegram-bot-api": "^0.64.0",
     "nodemailer": "^6.9.7",
     "nodemailer-sparkpost-transport": "^2.2.0",
     "otplib": "^12.0.1",
