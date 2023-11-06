@@ -28,9 +28,15 @@ export class Message {
   @Column()
   chatId: string;
 
+  @Column()
+  agencyId: number;
+
   @Column({ nullable: true })
   text: string;
 
   @Column({default: false})
-  counted: boolean;
+  isCounted: boolean;
+
+  @Column({default: false})
+  isRead: boolean;
 }

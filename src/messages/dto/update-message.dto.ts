@@ -15,5 +15,8 @@ export class UpdateMessageDto {
 
   @IsNotEmpty()
   text: string;
+
+  @IsNotEmpty()
+  isRead: boolean;
 }
 

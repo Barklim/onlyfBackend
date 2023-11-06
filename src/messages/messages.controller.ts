@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, Req } from '@nestjs/common';
 import { MessagesService } from './messages.service';
 import { Auth } from '../iam/authentication/decorators/auth.decorator';
 import { AuthType } from '../iam/authentication/enums/auth-type.enum';
@@ -6,6 +6,7 @@ import { CreateMessageDto } from './dto/create-message.dto';
 import { Roles } from '../iam/authorization/decorators/roles.decorator';
 import { Role } from '../users/enums/role.enum';
 import { UpdateMessageDto } from './dto/update-message.dto';
+import { Request } from 'express';
 
 // TODO: authType
 @Auth(AuthType.None)
@@ -53,7 +54,13 @@ export class MessagesController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateMessageDto: Array<UpdateMessageDto>) {
-    return this.messageService.update(id, updateMessageDto);
+  update(
+    @Req() request: Request,
+    @Param('id') id: string,
+    @Body() updateMessageDto: Array<UpdateMessageDto>
+  ) {
+    const tokenParts = request.headers.authorization.split(' ');
+
+    return this.messageService.update(tokenParts[1], id, updateMessageDto);
   }
 }

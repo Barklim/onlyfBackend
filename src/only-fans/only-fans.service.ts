@@ -266,7 +266,7 @@ export class OnlyFansService {
                   newChat.chatId = unreadChat.chatId;
                   // newChat.created_at = unreadChat.created_at;
                   newChat.text = unreadChat.text;
-                  newChat.counted = false;
+                  newChat.isCounted = false;
                   await this.messagesRepository.save(newChat);
                 }
                 // await this.unreadMessagesRepository.update({ chatId: unreadChat.chatId }, {

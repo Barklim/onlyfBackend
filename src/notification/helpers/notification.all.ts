@@ -4,13 +4,13 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../../users/entities/user.entity';
 import { Repository } from 'typeorm';
 import { NotificationType } from '../enums/notification.enum';
-import { Role } from '../../users/enums/role.enum';
 import { SendNotifications } from './notification.send';
 import { ConfigService } from '@nestjs/config';
 import { Invite } from '../../agency/enums/agency.enum';
 import { Agency } from '../../agency/entities/agency.entity';
 import { EmailService } from '../../email/email.service';
-import { TelegramService } from '../../telegram/telegram.service';
+import { Incident } from '../../incident/entities/incident.entities';
+import { TIncident } from '../../incident/enums/incident.enum';
 
 @Injectable()
 export class AllNotifications {
@@ -99,5 +99,35 @@ export class AllNotifications {
       id: agency.ownerId
     })
     await this.emailService.sendNotificationMail(ownerUser, 'Invitation has accept.', adminUserText, this.eventData, NotificationType.COMMON)
+  }
+
+  async OnIncident(agency: Agency, incident: Incident) {
+
+    const type = incident.type;
+    let incidentTypeText = ''
+    if (type === TIncident.Chat) {
+      incidentTypeText = `do stop words: ${incident.stopWords}`;
+    } else {
+      incidentTypeText = 'so late answering'
+    }
+
+    for (const id of agency.admins) {
+      const adminUser = await this.usersRepository.findOneBy({
+        id: id
+      })
+      const dstUserLink = `<a href="${this.GetServerUri()}/user/profile/${adminUser.id}">${adminUser.email}</a>`;
+      const adminUserText = `Hello, ${dstUserLink}. User by ${incident.ofId} ${incidentTypeText}.`;
+
+      await this.sendNotifications.createNotification(id, 'Incident.', adminUserText, NotificationType.COMMON);
+      await this.emailService.sendNotificationMail(adminUser, 'Incident.', adminUserText, this.eventData, NotificationType.COMMON)
+    }
+
+    const ownerUser = await this.usersRepository.findOneBy({
+      id: agency.ownerId
+    })
+    const dstUserLink = `<a href="${this.GetServerUri()}/user/profile/${ownerUser.id}">${ownerUser.email}</a>`;
+    const adminUserText = `Hello, ${dstUserLink}. User by ${incident.ofId} ${incidentTypeText}.`;
+    await this.sendNotifications.createNotification(agency.ownerId, 'Incident.', adminUserText, NotificationType.COMMON);
+    await this.emailService.sendNotificationMail(ownerUser, 'Incident.', adminUserText, this.eventData, NotificationType.COMMON)
   }
 }

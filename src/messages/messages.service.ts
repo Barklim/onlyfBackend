@@ -4,11 +4,14 @@ import { Repository } from 'typeorm';
 import { Message } from './entities/message.entity';
 import { CreateMessageDto } from './dto/create-message.dto';
 import { UpdateMessageDto } from './dto/update-message.dto';
+import * as jwt from 'jsonwebtoken';
+import { User } from '../users/entities/user.entity';
 
 @Injectable()
 export class MessagesService {
   constructor(
     @InjectRepository(Message) private readonly messagesRepository: Repository<Message>,
+    @InjectRepository(User) private readonly usersRepository: Repository<User>,
   ){}
 
   async createOne(id: string, createMessageDto: CreateMessageDto) {
@@ -36,8 +39,17 @@ export class MessagesService {
     return 'create many messages';
   }
 
-  async update(id: string, updateMessageDto: Array<UpdateMessageDto>) {
+  async update(token: string, id: string, updateMessageDto: Array<UpdateMessageDto>) {
     try {
+      const refreshTokenData = jwt.decode(token) as { email: string };
+      const email = refreshTokenData.email;
+      const user = await this.usersRepository.findOneBy({
+        email: email,
+      })
+      if (!user.agencyId) {
+        throw new ConflictException('User have not agency!');
+      }
+
       for (const message of updateMessageDto) {
         const existingMessage = await this.messagesRepository.findOneBy({
           msgId: message.msgId,
@@ -51,11 +63,14 @@ export class MessagesService {
           newMessage.msgId = message.msgId;
           newMessage.chatId = message.chatId;
           newMessage.fromUserId = message.fromUserId;
+          newMessage.agencyId = user.agencyId;
           newMessage.text = message.text.substring(0, 30);
+          newMessage.isRead = message.isRead
 
           await this.messagesRepository.save(newMessage);
         } else {
           existingMessage.text = message.text.substring(0, 30);
+          existingMessage.isRead = message.isRead;
           // TODO: remove. For testing
           existingMessage.msg_created_at = message.msg_created_at;
           existingMessage.fromUserId = message.fromUserId;

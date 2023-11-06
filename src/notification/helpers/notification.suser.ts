@@ -10,6 +10,8 @@ import { Invite } from '../../agency/enums/agency.enum';
 import { Agency } from '../../agency/entities/agency.entity';
 import { EmailService } from '../../email/email.service';
 import { TelegramService } from '../../telegram/telegram.service';
+import { Incident } from '../../incident/entities/incident.entities';
+import { TIncident } from '../../incident/enums/incident.enum';
 
 @Injectable()
 export class SUserNotifications {
@@ -71,5 +73,33 @@ export class SUserNotifications {
       await this.sendNotifications.createNotification(sUser.id, 'Invitation accept', text, NotificationType.COMMON);
     }
     await this.telegramService.sendNotificationTelegram(`Invitation accept \n\n${telegramText}`)
+  }
+
+  async OnIncident(agency: Agency, incident: Incident) {
+
+    const type = incident.type;
+    let incidentTypeText = ''
+    if (type === TIncident.Chat) {
+      incidentTypeText = `do stop words: ${incident.stopWords}`;
+    } else {
+      incidentTypeText = 'so late answering'
+    }
+
+    const ownerUser = await this.usersRepository.findOneBy({
+      id: agency.ownerId
+    })
+
+    const dstUserLink = `<a href="${this.GetServerUri()}/user/profile/${ownerUser.id}">${ownerUser.email}</a>`;
+    const text = `Hello, ${dstUserLink}. User by ${incident.ofId} ${incidentTypeText}. To Agency: ${agency.name}`;
+    const telegramText = `User by ${incident.ofId} ${incidentTypeText}. \n\nOwner: ${ownerUser.email} of Agency: ${agency.name} get Incident. `;
+
+    const superUsers = await this.usersRepository.findBy({
+      role: Role.SuperUser,
+    })
+
+    for (const sUser of superUsers) {
+      await this.sendNotifications.createNotification(sUser.id, 'Incident', text, NotificationType.COMMON);
+    }
+    await this.telegramService.sendNotificationTelegram(`Incident \n\n${telegramText}`)
   }
 }

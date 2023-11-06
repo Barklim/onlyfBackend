@@ -58,3 +58,7 @@ nest g controller telegram
 2. Пишешь созданному боту @userinfobot
 3. Кликаешь на это сообщение и тебя редиректит в некоторый чат, где можно получить id данного бота
 4. Данный id, можно использовать для рассылки уведомлений
+
+nest g module incident
+nest g service incident
+nest g controller incident

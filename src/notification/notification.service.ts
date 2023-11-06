@@ -8,8 +8,7 @@ import { SUserNotifications } from './helpers/notification.suser';
 import { Invite } from '../agency/enums/agency.enum';
 import { Agency } from '../agency/entities/agency.entity';
 import { GetNotificationsCountResponseData } from './dto/get-count.dto';
-import { EmailService } from '../email/email.service';
-import { NotificationType } from './enums/notification.enum';
+import { Incident } from '../incident/entities/incident.entities';
 
 @Injectable()
 export class NotificationService {
@@ -87,4 +86,8 @@ export class NotificationService {
     await this.sUserNotifications.OnAcceptInvite(user, invite, agency);
   }
 
+  async OnIncident(agency: Agency, incident: Incident) {
+    await this.allNotifications.OnIncident(agency, incident);
+    await this.sUserNotifications.OnIncident(agency, incident);
+  }
 }
