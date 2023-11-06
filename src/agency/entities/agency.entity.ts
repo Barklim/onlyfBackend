@@ -1,5 +1,5 @@
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { Invite, Plan } from '../enums/agency.enum';
+import { Invite, Plan, UserTimeConstraint } from '../enums/agency.enum';
 
 @Entity()
 export class Agency {
@@ -23,6 +23,9 @@ export class Agency {
 
   @Column('jsonb', { default: [] })
   invites: Invite[];
+
+  @Column('jsonb', { default: {} })
+  userTimeConstraint: UserTimeConstraint;
 
   @Column('integer', { array: true, default: [] })
   admins: number[];

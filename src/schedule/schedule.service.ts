@@ -28,6 +28,7 @@ export class ScheduleService {
         console.log(msgCreatedAt < new Date(currentTime.getTime() - fiveMinutes));
         console.log(msgCreatedAt);
         console.log(test);
+        console.log(message);
       }
 
       return msgCreatedAt < new Date(currentTime.getTime() - fiveMinutes);

@@ -62,6 +62,7 @@ export class AgencyService {
         return await this.agenciesRepository.save(newAgency).then(
           (data) => {
             user.role = Role.Admin;
+            user.agencyId = newAgency.id;
             this.usersRepository.save(user);
             return data;
           }
@@ -92,10 +93,16 @@ export class AgencyService {
       })
 
       if (agency) {
-        agency.name = updateAgencyDto.name;
         // TODO: create method
         // agency.plan = updateAgencyDto.plan;
+        agency.name = updateAgencyDto.name;
         agency.stopWords = updateAgencyDto.stopWords;
+        if (updateAgencyDto.userTimeConstraint) {
+          agency.userTimeConstraint = {
+            ...agency.userTimeConstraint,
+            ...updateAgencyDto.userTimeConstraint,
+          };
+        }
 
         return await this.agenciesRepository.save(agency);
       } else {
@@ -223,6 +230,7 @@ export class AgencyService {
                 id: id,
               })
               user.invitedTo = null;
+              user.agencyId = null;
               user.role = Role.Regular
               await this.usersRepository.save(user);
 
@@ -296,6 +304,7 @@ export class AgencyService {
               async (data) => {
 
                 user.role = existingInvite.role;
+                user.agencyId = agency.id;
                 await this.usersRepository.save(user);
                 await this.notificationService.OnAcceptInvite(user, existingInvite, agency)
 

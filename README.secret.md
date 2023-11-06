@@ -163,7 +163,9 @@ npm run start -- --entryFile repl
 
 await getCustomRepository(UserRepository).clear();
 await get("UserRepository").findOne({ where: { id: 90 }})
+await get("UserRepository").findOne({ where: { id: 173 }})
 await get("UserRepository").update({ id:  91 }, { role: 'superuser' })
+await get("UserRepository").update({ id:  173 }, { role: 'regular' })
 
 await get("ScrapperRepository").find()
 await get("ScrapperRepository").update({ id: 5 }, { status: 'offline' })
@@ -174,7 +176,8 @@ await get("MessageRepository").find()
 await get("MessageRepository").find({ id: 40  })
 await get("MessageRepository").delete({ id: 3 })
 
-await get("AgencyRepository").delete({ id: 13 })
+await get("AgencyRepository").delete({ id: 17 })
+await get("AgencyRepository").clear();
 await get("AgencyRepository").find()
 
 await get("NotificationRepository").find()

@@ -11,3 +11,5 @@ export type Invite = {
   role: Role;
   accepted: boolean;
 };
+
+export type UserTimeConstraint =  { [key: string]: number };

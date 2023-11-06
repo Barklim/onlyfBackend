@@ -6,5 +6,7 @@ export class UpdateAgencyDto {
   name: string;
   @IsNotEmpty()
   stopWords: string;
+
+  userTimeConstraint: { [key: string]: number };
 }
 
