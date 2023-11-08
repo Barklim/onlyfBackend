@@ -62,3 +62,7 @@ nest g controller telegram
 nest g module incident
 nest g service incident
 nest g controller incident
+
+nest g module profile
+nest g service profile
+nest g controller profile

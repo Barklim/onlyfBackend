@@ -1,4 +1,5 @@
-import { IsEmail, IsNumber, IsNumberString, IsOptional, MinLength } from 'class-validator';
+import { IsEmail, IsNumberString, IsOptional, MinLength } from 'class-validator';
+import { TUserFeatures, TUserJsonSettings } from '../../../../users/enums/user.settings';
 
 export class SignInDto {
   @IsEmail()
@@ -11,3 +12,14 @@ export class SignInDto {
   @IsNumberString()
   tfaCode?: string;
 }
+
+export interface SignInResponse {
+  accessToken: string;
+  refreshToken: string;
+  id: number;
+  email: string;
+  features: TUserFeatures;
+  avatar: string;
+  jsonSettings: TUserJsonSettings;
+}
+

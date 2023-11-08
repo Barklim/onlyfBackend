@@ -113,6 +113,8 @@ so many notifications services
 проверить разрешения настройек по отправке уведомлений
 добавить метод для публикации инфо уведомлений.
 smtp gmail to sendgrid
+apiKEY,
+accept cookie UI banner
 //
 kliment.barkalov1@gmail.com
 samaca-ludu-rajewa

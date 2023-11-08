@@ -14,9 +14,10 @@ import { SUserNotifications } from '../notification/helpers/notification.suser';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { EmailService } from '../email/email.service';
 import { TelegramService } from '../telegram/telegram.service';
+import { Profile } from '../profile/entities/profile.entities';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User, ApiKey, Notification]), ConfigModule.forRoot()],
+  imports: [TypeOrmModule.forFeature([User, ApiKey, Notification, Profile]), ConfigModule.forRoot()],
   controllers: [UsersController],
   providers: [
     UsersService,

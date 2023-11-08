@@ -4,8 +4,8 @@ import { User } from '../../users/entities/user.entity';
 import { Repository } from 'typeorm';
 import * as jwt from 'jsonwebtoken';
 import { HashingService } from '../hashing/hashing.service';
-import { SignUpDto } from './dto/sign-up.dto/sign-up.dto';
-import { SignInDto } from './dto/sign-in.dto/sign-in.dto';
+import { SignUpDto, SignUpResponse } from './dto/sign-up.dto/sign-up.dto';
+import { SignInDto, SignInResponse } from './dto/sign-in.dto/sign-in.dto';
 import { JwtService } from '@nestjs/jwt';
 import jwtConfig from '../config/jwt.config'
 import { ConfigType } from '@nestjs/config';
@@ -18,11 +18,13 @@ import {
 } from './refresh-token-ids.storage/refresh-token-ids.storage';
 import { OtpAuthenticationService } from './opt-authentication/opt-authentication.service';
 import { NotificationService } from '../../notification/notification.service';
+import { Profile } from '../../profile/entities/profile.entities';
 
 @Injectable()
 export class AuthenticationService {
   constructor(
     @InjectRepository(User) private readonly usersRepository: Repository<User>,
+    @InjectRepository(Profile) private readonly profilesRepository: Repository<Profile>,
     private readonly hashingService: HashingService,
     private readonly jwtService: JwtService,
     @Inject(jwtConfig.KEY)
@@ -32,18 +34,38 @@ export class AuthenticationService {
     private notificationService: NotificationService,
   ){}
 
-  async signUp(signUpDto: SignUpDto) {
+  async signUp(signUpDto: SignUpDto): Promise<SignUpResponse> {
     try {
       const user = new User();
       user.email = signUpDto.email;
       user.password = await this.hashingService.hash(signUpDto.password);
 
-      await this.usersRepository.save(user).then(
-        async (data) => {
-          await this.notificationService.OnSignUp(data.id)
-          return await this.generateTokens(user);
-      });
-      return await this.generateTokens(user);
+      let savedUser = await this.usersRepository.save(user);
+
+
+      const profile = new Profile();
+      savedUser.profileId = String(profile.id);
+      profile.userId = savedUser.id;
+
+      await this.profilesRepository.save(profile);
+      savedUser.profileId = String(profile.id);
+      savedUser = await this.usersRepository.save(savedUser);
+
+      const tokens = await this.generateTokens(savedUser);
+
+      const signUpResponse: SignUpResponse = {
+        accessToken: tokens.accessToken,
+        refreshToken: tokens.refreshToken,
+        id: savedUser.id,
+        email: savedUser.email,
+        features: savedUser.features,
+        avatar: savedUser.avatar,
+        jsonSettings: savedUser.jsonSettings,
+      };
+
+      await this.notificationService.OnSignUp(savedUser.id);
+
+      return signUpResponse;
     } catch (err) {
       const pgUniqueViolationErrorCode = '23505';
       if (err.code === pgUniqueViolationErrorCode) {
@@ -53,7 +75,7 @@ export class AuthenticationService {
     }
   }
 
-  async signIn(signInDto: SignInDto) {
+  async signIn(signInDto: SignInDto): Promise<SignInResponse> {
     const user = await this.usersRepository.findOneBy({
       email: signInDto.email,
     })
@@ -76,7 +98,20 @@ export class AuthenticationService {
         throw new UnauthorizedException('Invalid 2FA code');
       }
     }
-    return await this.generateTokens(user);
+
+    const tokens = await this.generateTokens(user);
+
+    const signInResponse: SignInResponse = {
+      accessToken: tokens.accessToken,
+      refreshToken: tokens.refreshToken,
+      id: user.id,
+      email: user.email,
+      features: user.features,
+      avatar: user.avatar,
+      jsonSettings: user.jsonSettings,
+    };
+
+    return signInResponse;
   }
 
   async generateTokens(user: User, remainingTime?: number) {

@@ -10,20 +10,50 @@ import { ConfigType } from '@nestjs/config';
 import * as jwt from 'jsonwebtoken';
 import { NotificationsSource, NotificationsType, TUserSettings } from './enums/user.settings';
 import { UpdateNotificationsRequestData } from '../notification/dto/update-notifications.dto';
+import { FindAllParams } from './dto/findAll.dto';
+import { Profile } from '../profile/entities/profile.entities';
 
 @Injectable()
 export class UsersService {
   constructor(
-    @InjectRepository(User) private readonly usersRepository: Repository<User>
+    @InjectRepository(User) private readonly usersRepository: Repository<User>,
+    @InjectRepository(Profile) private readonly profilesRepository: Repository<Profile>
   ){}
 
   create(createUserDto: CreateUserDto) {
     return 'This action adds a new user';
   }
 
-  findAll() {
-    return `This action returns all users`;
+  async findAll(params: FindAllParams) {
+    const { _limit, _page, _expand } = params;
+    const query = this.usersRepository.createQueryBuilder('user');
+
+    if (_limit && _page) {
+      const limit = parseInt(_limit, 10);
+      const page = parseInt(_page, 10);
+      query.skip((page - 1) * limit).take(limit);
+    }
+
+    const users = await query.getMany();
+
+    if (_expand) {
+      const userProfiles = await Promise.all(users.map(async (user) => {
+        const profile = await this.profilesRepository.findOneBy({
+          id: Number(user.profileId),
+        });
+
+        return {
+          ...user,
+          profile,
+        };
+      }));
+
+      return userProfiles;
+    }
+
+    return users;
   }
+
 
   async findMe(token: string) {
     const refreshTokenData = jwt.decode(token) as any;

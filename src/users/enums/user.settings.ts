@@ -21,3 +21,11 @@ export type NotificationsSettingsItem = {
 export type TUserSettings = {
   notifications: NotificationsSettings,
 };
+
+export type TUserFeatures = {
+  [key: string]: boolean;
+};
+
+export type TUserJsonSettings = {
+  [key: string]: boolean | string;
+};

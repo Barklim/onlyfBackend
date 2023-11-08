@@ -35,10 +35,11 @@ import { AdminNotifications } from '../notification/helpers/notification.admin';
 import { ManagerNotifications } from '../notification/helpers/notification.manager';
 import { EmailService } from '../email/email.service';
 import { TelegramService } from '../telegram/telegram.service';
+import { Profile } from '../profile/entities/profile.entities';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User, ApiKey, Notification]),
+    TypeOrmModule.forFeature([User, ApiKey, Notification, Profile]),
     JwtModule.registerAsync(jwtConfig.asProvider()),
     ConfigModule.forFeature(jwtConfig),
   ],
