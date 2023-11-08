@@ -3,7 +3,6 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
-import { Notification } from '../notification/entities/notification.entity';
 import { Repository } from 'typeorm';
 import jwtConfig from '../iam/config/jwt.config';
 import { ConfigType } from '@nestjs/config';
@@ -25,8 +24,21 @@ export class UsersService {
   }
 
   async findAll(params: FindAllParams) {
-    const { _limit, _page, _expand } = params;
+    const { _expand, _limit, _page, _sort, _order, q, roles } = params;
     const query = this.usersRepository.createQueryBuilder('user');
+
+    // console.log('!!! 123');
+    // console.log(_sort);
+    // console.log('!!!');
+
+    // if (params.q) {
+    //   query.where('user.profile.username LIKE :q', { q: `%${params.q}%` });
+    // }
+
+    // if (params._sort) {
+    //   const order = params._order === 'desc' ? 'DESC' : 'ASC';
+    //   query.orderBy(`user.${params._sort}`, order);
+    // }
 
     if (_limit && _page) {
       const limit = parseInt(_limit, 10);
@@ -53,7 +65,6 @@ export class UsersService {
 
     return users;
   }
-
 
   async findMe(token: string) {
     const refreshTokenData = jwt.decode(token) as any;
@@ -99,10 +110,22 @@ export class UsersService {
     // return user.settings;
   }
 
-  async findOne(id: number) {
+  async findOne(id: number, _expand: string) {
     const user = await this.usersRepository.findOneBy({
       id: id,
     })
+
+    if (_expand) {
+      const profile = await this.profilesRepository.findOneBy({
+        id: Number(user.profileId),
+      });
+
+      return {
+        ...user,
+        profile,
+      };
+    }
+
     return user;
   }
 
