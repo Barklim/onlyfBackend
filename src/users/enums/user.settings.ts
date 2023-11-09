@@ -29,3 +29,5 @@ export type TUserFeatures = {
 export type TUserJsonSettings = {
   [key: string]: boolean | string;
 };
+
+export type TUserTheme = 'app_orange_theme' | 'app_dark_theme' | 'app_light_theme';

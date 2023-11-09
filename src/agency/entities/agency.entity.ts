@@ -4,13 +4,13 @@ import { Invite, Plan, UserTimeConstraint } from '../enums/agency.enum';
 @Entity()
 export class Agency {
   @PrimaryGeneratedColumn()
-  id: number;
+  id: string;
 
   @CreateDateColumn()
   created_at: Date;
 
   @Column({unique: true})
-  ownerId: number;
+  ownerId: string;
 
   @Column()
   name: string;
@@ -28,13 +28,13 @@ export class Agency {
   userTimeConstraint: UserTimeConstraint;
 
   @Column('integer', { array: true, default: [] })
-  admins: number[];
+  admins: string[];
 
   @Column('integer', { array: true, default: [] })
-  managers: number[];
+  managers: string[];
 
   @Column('integer', { array: true, default: [] })
-  models: number[];
+  models: string[];
 
   @Column({default: false})
   verified: boolean;

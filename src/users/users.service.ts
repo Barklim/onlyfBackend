@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -27,18 +27,9 @@ export class UsersService {
     const { _expand, _limit, _page, _sort, _order, q, roles } = params;
     const query = this.usersRepository.createQueryBuilder('user');
 
-    // console.log('!!! 123');
-    // console.log(_sort);
-    // console.log('!!!');
-
-    // if (params.q) {
-    //   query.where('user.profile.username LIKE :q', { q: `%${params.q}%` });
-    // }
-
-    // if (params._sort) {
-    //   const order = params._order === 'desc' ? 'DESC' : 'ASC';
-    //   query.orderBy(`user.${params._sort}`, order);
-    // }
+    if (_expand) {
+      query.leftJoinAndSelect('user.profile', 'profile');
+    }
 
     if (_limit && _page) {
       const limit = parseInt(_limit, 10);
@@ -46,22 +37,32 @@ export class UsersService {
       query.skip((page - 1) * limit).take(limit);
     }
 
-    const users = await query.getMany();
+    if (_sort) {
+      const order = _order === 'desc' ? 'DESC' : 'ASC';
 
-    if (_expand) {
-      const userProfiles = await Promise.all(users.map(async (user) => {
-        const profile = await this.profilesRepository.findOneBy({
-          id: Number(user.profileId),
-        });
-
-        return {
-          ...user,
-          profile,
-        };
-      }));
-
-      return userProfiles;
+      if (_sort === 'username') {
+        query.addSelect('profile.username');
+        query.leftJoin('user.profile', 'profile');
+        query.addOrderBy('profile.username', order);
+      } else if (_sort === 'createdAt') {
+        query.addOrderBy('user.created_at', order);
+      } else if (_sort === 'online') {
+        query.addOrderBy('user.online', order);
+      }
     }
+
+    if (q) {
+      query
+        .innerJoin('user.profile', 'profile')
+        .where('profile.username LIKE :q', { q: `%${q}%` });
+    }
+
+    if (roles) {
+      const rolesArray = roles.toLowerCase().split(',');
+      query.andWhere('user.roles @> :roles', { roles: rolesArray });
+    }
+
+    const users = await query.getMany();
 
     return users;
   }
@@ -110,14 +111,14 @@ export class UsersService {
     // return user.settings;
   }
 
-  async findOne(id: number, _expand: string) {
+  async findOne(id: string, _expand: string) {
     const user = await this.usersRepository.findOneBy({
       id: id,
     })
 
     if (_expand) {
       const profile = await this.profilesRepository.findOneBy({
-        id: Number(user.profileId),
+        id: user.profileId,
       });
 
       return {
@@ -129,11 +130,37 @@ export class UsersService {
     return user;
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(id: string, updateUserDto: UpdateUserDto) {
+    const user = await this.usersRepository.findOneBy({
+      id: id,
+    })
+
+    if (updateUserDto.isAccountsPageWasOpened !== undefined) {
+      user.jsonSettings['isAccountsPageWasOpened'] = updateUserDto.isAccountsPageWasOpened;
+    }
+    if (updateUserDto.isArticlesPageWasOpened !== undefined) {
+      user.jsonSettings['isArticlesPageWasOpened'] = updateUserDto.isArticlesPageWasOpened;
+    }
+    if (updateUserDto.theme !== undefined) {
+      user.jsonSettings['theme'] = updateUserDto.theme;
+    }
+
+    if (updateUserDto.features) {
+      if (updateUserDto.features['isArticleRatingEnabled'] !== undefined) {
+        user.features['isArticleRatingEnabled'] = updateUserDto.features['isArticleRatingEnabled']
+      }
+      if (updateUserDto.features['isCounterEnabled'] !== undefined) {
+        user.features['isCounterEnabled'] = updateUserDto.features['isCounterEnabled']
+      }
+      if (updateUserDto.features['isAppRedesigned'] !== undefined) {
+        user.features['isAppRedesigned'] = updateUserDto.features['isAppRedesigned']
+      }
+    }
+
+    return  await this.usersRepository.save(user);
   }
 
-  remove(id: number) {
+  remove(id: string) {
     return `This action removes a #${id} user`;
   }
 }

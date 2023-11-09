@@ -6,7 +6,7 @@ export interface ActiveUserData {
    *	The "subject" of the token. The value of this property it the user ID
    *	that granted this token.
    */
-  sub: number;
+  sub: string;
 
   /**
    *	The subject's (user) email.

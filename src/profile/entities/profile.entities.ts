@@ -3,10 +3,10 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 @Entity()
 export class Profile {
   @PrimaryGeneratedColumn()
-  id: number;
+  id: string;
 
   @Column({unique: false})
-  userId: number;
+  userId: string;
 
   @Column({ default: 'username' })
   username: string;

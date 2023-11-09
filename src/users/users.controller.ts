@@ -51,16 +51,16 @@ export class UsersController {
     @Param('id') id: string,
     @Query('_expand') _expand: string
   ) {
-    return this.usersService.findOne(+id, _expand);
+    return this.usersService.findOne(id, _expand);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(+id, updateUserDto);
+    return this.usersService.update(id, updateUserDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.usersService.remove(+id);
+    return this.usersService.remove(id);
   }
 }

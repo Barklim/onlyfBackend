@@ -16,7 +16,7 @@ export class NotificationController {
     const token = tokenParts[1]
     const refreshTokenData = jwt.decode(token);
 
-    return this.notificationService.getNotificationForUser(refreshTokenData.sub as unknown as number);
+    return this.notificationService.getNotificationForUser(refreshTokenData.sub as unknown as string);
   }
 
   @Get('count')
@@ -25,18 +25,18 @@ export class NotificationController {
     const token = tokenParts[1]
     const refreshTokenData = jwt.decode(token);
 
-    return this.notificationService.getNotificationCountForUser(refreshTokenData.sub as unknown as number);
+    return this.notificationService.getNotificationCountForUser(refreshTokenData.sub as unknown as string);
   }
 
   @Delete(':notificationId')
   markAsDelete(
-    @Param('notificationId') notificationId: number,
+    @Param('notificationId') notificationId: string,
     @Req() request: Request)
   {
     const tokenParts = request.headers.authorization.split(' ');
     const token = tokenParts[1]
     const refreshTokenData = jwt.decode(token);
 
-    return this.notificationService.markAsDelete(notificationId, refreshTokenData.sub as unknown as number);
+    return this.notificationService.markAsDelete(notificationId, refreshTokenData.sub as unknown as string);
   }
 }

@@ -36,16 +36,16 @@ export class ScrapperController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.scrapperService.findOne(+id);
+    return this.scrapperService.findOne(id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateScrapperDto: UpdateScrapperDto) {
-    return this.scrapperService.update(+id, updateScrapperDto);
+    return this.scrapperService.update(id, updateScrapperDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.scrapperService.remove(+id);
+    return this.scrapperService.remove(id);
   }
 }

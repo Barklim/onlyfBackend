@@ -8,7 +8,7 @@ export class ProfileService {
   @InjectRepository(Profile) private readonly profilesRepository: Repository<Profile>
 
 
-  async findOne(id: number) {
+  async findOne(id: string) {
     const profile = await this.profilesRepository.findOneBy({
       id: id,
     })

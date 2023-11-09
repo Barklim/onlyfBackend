@@ -19,7 +19,7 @@ export class NotificationService {
     private readonly allNotifications: AllNotifications,
   ){}
 
-  async getNotificationForUser(dstUserId: number): Promise<Array<Notification>> {
+  async getNotificationForUser(dstUserId: string): Promise<Array<Notification>> {
     const notifications = await this.notificationsRepository.findBy({
       dstUserId: dstUserId,
       isDelete: false
@@ -38,7 +38,7 @@ export class NotificationService {
     return notifications;
   }
 
-  async getNotificationCountForUser(dstUserId: number): Promise<GetNotificationsCountResponseData> {
+  async getNotificationCountForUser(dstUserId: string): Promise<GetNotificationsCountResponseData> {
     const count = (await this.notificationsRepository.findBy({
       dstUserId: dstUserId,
       isRead: false
@@ -47,7 +47,7 @@ export class NotificationService {
     return { count };
   }
 
-  async markAsRead(notificationId: number, dstUserId: number): Promise<Notification | null> {
+  async markAsRead(notificationId: string, dstUserId: string): Promise<Notification | null> {
     const notification = await this.notificationsRepository.findOneBy({
       id: notificationId,
       dstUserId: dstUserId
@@ -56,7 +56,7 @@ export class NotificationService {
     return  await this.notificationsRepository.save(notification);
   }
 
-  async markAsDelete(notificationId: number, dstUserId: number): Promise<Notification | null> {
+  async markAsDelete(notificationId: string, dstUserId: string): Promise<Notification | null> {
     const notification = await this.notificationsRepository.findOneBy({
       id: notificationId,
       dstUserId: dstUserId
@@ -65,7 +65,7 @@ export class NotificationService {
     return await this.notificationsRepository.save(notification);
   }
 
-  async OnSignUp(dstUserId: number) {
+  async OnSignUp(dstUserId: string) {
     const user = await this.usersRepository.findOneBy({
       id: dstUserId,
     })

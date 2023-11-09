@@ -39,7 +39,7 @@ export class ScrapperService {
     return this.scrappersRepository.find();
   }
 
-  async findOne(id: number) {
+  async findOne(id: string) {
     const scrapper = await this.scrappersRepository.findOneBy({
       id: id,
     });
@@ -51,7 +51,7 @@ export class ScrapperService {
     return scrapper;
   }
 
-  async update(id: number, updateScrapperDto: UpdateScrapperDto) {
+  async update(id: string, updateScrapperDto: UpdateScrapperDto) {
     const existingScrapper = await this.scrappersRepository.findOneBy({
       id: id,
     });
@@ -69,7 +69,7 @@ export class ScrapperService {
     return existingScrapper;
   }
 
-  async remove(id: number) {
+  async remove(id: string) {
     const existingScrapper = await this.scrappersRepository.findOneBy({
       id: id,
     });

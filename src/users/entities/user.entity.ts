@@ -1,4 +1,13 @@
-import { Column, Entity, JoinTable, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  JoinTable,
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Role } from '../enums/role.enum';
 import { Permission, PermissionType } from '../../iam/authorization/permission.type';
 import { ApiKey } from '../api-keys/entities/api-key.entity/api-key.entity';
@@ -9,11 +18,15 @@ import {
   TUserFeatures, TUserJsonSettings,
   TUserSettings,
 } from '../enums/user.settings';
+import { Profile } from '../../profile/entities/profile.entities';
 
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
-  id: number;
+  id: string;
+
+  @CreateDateColumn()
+  created_at: Date;
 
   @Column({unique: true})
   email: string;
@@ -22,10 +35,10 @@ export class User {
   password: string;
 
   @Column({ nullable: true , default: null})
-  agencyId: number | null;
+  agencyId: string | null;
 
   @Column({ nullable: true , default: null})
-  invitedTo: number | null;
+  invitedTo: string | null;
 
   @Column({ enum: Role, default: Role.Regular })
   role: Role;
@@ -100,5 +113,7 @@ export class User {
   })
   jsonSettings: TUserJsonSettings;
 
-
+  @OneToOne(type => Profile)
+  @JoinColumn()
+  profile?: Profile;
 }

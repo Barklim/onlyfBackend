@@ -40,16 +40,14 @@ export class AuthenticationService {
       user.email = signUpDto.email;
       user.password = await this.hashingService.hash(signUpDto.password);
 
+      const profile = new Profile();
+      profile.userId = 'temporaryUserId'
+      const profileSaved = await this.profilesRepository.save(profile);
+      user.profileId = profileSaved.id;
       let savedUser = await this.usersRepository.save(user);
 
-
-      const profile = new Profile();
-      savedUser.profileId = String(profile.id);
-      profile.userId = savedUser.id;
-
-      await this.profilesRepository.save(profile);
-      savedUser.profileId = String(profile.id);
-      savedUser = await this.usersRepository.save(savedUser);
+      profileSaved.userId = savedUser.id;
+      await this.profilesRepository.save(profileSaved);
 
       const tokens = await this.generateTokens(savedUser);
 
@@ -176,7 +174,7 @@ export class AuthenticationService {
     }
   }
 
-  private async signToken<T>(userId: number, expiresIn: number, payload?: T) {
+  private async signToken<T>(userId: string, expiresIn: number, payload?: T) {
     const accessToken = await this.jwtService.signAsync(
       {
         sub: userId,

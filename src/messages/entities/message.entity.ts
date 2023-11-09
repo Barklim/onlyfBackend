@@ -3,7 +3,7 @@ import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from 'typeor
 @Entity()
 export class Message {
   @PrimaryGeneratedColumn()
-  id: number;
+  id: string;
 
   // @Column({ type: 'date' })
   // createdAt: string;
@@ -29,7 +29,7 @@ export class Message {
   chatId: string;
 
   @Column()
-  agencyId: number;
+  agencyId: string;
 
   @Column({ nullable: true })
   text: string;

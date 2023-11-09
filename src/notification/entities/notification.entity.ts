@@ -4,7 +4,7 @@ import { NotificationType } from '../enums/notification.enum';
 @Entity()
 export class Notification {
   @PrimaryGeneratedColumn()
-  id: number;
+  id: string;
 
   // date: Date;
   @CreateDateColumn()
@@ -14,7 +14,7 @@ export class Notification {
   type: NotificationType;
 
   @Column()
-  dstUserId: number;
+  dstUserId: string;
 
   @Column()
   title: string;

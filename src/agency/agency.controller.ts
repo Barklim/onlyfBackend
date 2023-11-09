@@ -56,6 +56,6 @@ export class AgencyController {
   async remove(@Req() request: Request, @Param('id') id: string) {
     const tokenParts = request.headers.authorization.split(' ');
 
-    return this.agencyService.remove(tokenParts[1], Number(id));
+    return this.agencyService.remove(tokenParts[1], id);
   }
 }

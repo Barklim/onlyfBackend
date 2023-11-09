@@ -12,7 +12,7 @@ export class SendNotifications {
     @InjectRepository(User) private readonly usersRepository: Repository<User>,
   ){}
 
-  async createNotification(dstUserId: number, title: string, text: string, type: NotificationType = NotificationType.COMMON) {
+  async createNotification(dstUserId: string, title: string, text: string, type: NotificationType = NotificationType.COMMON) {
     try {
       const dstUser = await this.usersRepository.findOneBy({
         id: dstUserId,

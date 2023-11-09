@@ -13,7 +13,7 @@ export class SignUpDto {
 export interface SignUpResponse {
   accessToken: string;
   refreshToken: string;
-  id: number;
+  id: string;
   email: string;
   features: TUserFeatures;
   avatar: string;

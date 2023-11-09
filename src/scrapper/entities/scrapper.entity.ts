@@ -4,7 +4,7 @@ import { Status } from '../enums/scrapper.enum';
 @Entity()
 export class Scrapper {
   @PrimaryGeneratedColumn()
-  id: number;
+  id: string;
 
   @Column({unique: true})
   email: string;

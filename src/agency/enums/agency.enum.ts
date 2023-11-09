@@ -7,7 +7,7 @@ export enum Plan {
 }
 
 export type Invite = {
-  id: number;
+  id: string;
   role: Role;
   accepted: boolean;
 };

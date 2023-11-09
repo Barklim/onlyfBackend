@@ -11,6 +11,9 @@ https://www.onlinepalette.com/onlyfans/
 https://onlyfans.com/api2/v2/chats?limit=10&offset=0&skip_users=all&order=recent
 unreadMessageCount
 
+docker run --name postgres -e POSTGRES_PASSWORD=pass123 -e POSTGRES_DB=postgres -p 5432:5432 -d postgres
+
+
 
 
 

@@ -183,7 +183,7 @@ export class AgencyService {
     }
   }
 
-  async remove(token: string, id: number) {
+  async remove(token: string, id: string) {
     try {
       const refreshTokenData = jwt.decode(token) as { email: string };
       const email = refreshTokenData.email;

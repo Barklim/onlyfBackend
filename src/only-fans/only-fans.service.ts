@@ -44,7 +44,7 @@ export class OnlyFansService {
 
     if (browser) {
       const scrapper = await this.scrappersRepository.findOneBy({
-        id: +id,
+        id: id,
       })
       scrapper.status = Status.Offline;
       await this.scrappersRepository.save(scrapper);
@@ -142,7 +142,7 @@ export class OnlyFansService {
 
         if (scrapper.status === Status.Online) {
           const scrapperBd = await this.scrappersRepository.findOneBy({
-            id: +scrapper.id,
+            id: scrapper.id,
           })
           scrapperBd.status = Status.Offline;
           await this.scrappersRepository.save(scrapperBd);
@@ -165,7 +165,7 @@ export class OnlyFansService {
 
   async runScrapper(id: string) {
     const scrapper = await this.scrappersRepository.findOneBy({
-      id: +id,
+      id: id,
     })
 
     if (!scrapper) {

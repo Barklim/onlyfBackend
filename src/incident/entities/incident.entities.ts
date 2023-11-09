@@ -4,7 +4,7 @@ import { TIncident } from '../enums/incident.enum';
 @Entity()
 export class Incident {
   @PrimaryGeneratedColumn()
-  id: number;
+  id: string;
 
   @Column()
   ofId: string;
@@ -22,7 +22,7 @@ export class Incident {
   type: TIncident;
 
   @Column()
-  agencyId: number;
+  agencyId: string;
 
   @Column({default: false})
   isCounted: boolean;
