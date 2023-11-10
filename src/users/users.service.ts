@@ -27,7 +27,7 @@ export class UsersService {
     const { _expand, _limit, _page, _sort, _order, q, roles } = params;
     const query = this.usersRepository.createQueryBuilder('user');
 
-    if (_expand) {
+    if (_expand && _sort !== 'username') {
       query.leftJoinAndSelect('user.profile', 'profile');
     }
 
@@ -63,6 +63,21 @@ export class UsersService {
     }
 
     const users = await query.getMany();
+
+    if (_expand) {
+      const userProfiles = await Promise.all(users.map(async (user) => {
+        const profile = await this.profilesRepository.findOneBy({
+          id: user.profileId,
+        });
+
+        return {
+          ...user,
+          profile,
+        };
+      }));
+
+      return userProfiles;
+    }
 
     return users;
   }
