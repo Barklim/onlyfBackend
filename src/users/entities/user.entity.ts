@@ -22,7 +22,7 @@ import { Profile } from '../../profile/entities/profile.entities';
 
 @Entity()
 export class User {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @CreateDateColumn()

@@ -27,13 +27,13 @@ export class Agency {
   @Column('jsonb', { default: {} })
   userTimeConstraint: UserTimeConstraint;
 
-  @Column('integer', { array: true, default: [] })
+  @Column('text', { array: true, default: [] })
   admins: string[];
 
-  @Column('integer', { array: true, default: [] })
+  @Column('text', { array: true, default: [] })
   managers: string[];
 
-  @Column('integer', { array: true, default: [] })
+  @Column('text', { array: true, default: [] })
   models: string[];
 
   @Column({default: false})
