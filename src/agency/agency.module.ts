@@ -14,9 +14,10 @@ import { Notification } from '../notification/entities/notification.entity';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { EmailService } from '../email/email.service';
 import { TelegramService } from '../telegram/telegram.service';
+import { Profile } from '../profile/entities/profile.entities';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User, Agency, Notification]), ConfigModule.forRoot()],
+  imports: [TypeOrmModule.forFeature([User, Agency, Profile, Notification]), ConfigModule.forRoot()],
   providers: [
     AgencyService,
     ConfigService,

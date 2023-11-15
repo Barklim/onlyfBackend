@@ -10,12 +10,14 @@ import { Invite, Plan } from './enums/agency.enum';
 import { Role } from '../users/enums/role.enum';
 import { InviteAgencyDto } from './dto/invite-agency.dto';
 import { NotificationService } from '../notification/notification.service';
+import { Profile } from '../profile/entities/profile.entities';
 
 @Injectable()
 export class AgencyService {
   constructor(
     @InjectRepository(User) private readonly usersRepository: Repository<User>,
     @InjectRepository(Agency) private readonly agenciesRepository: Repository<Agency>,
+    @InjectRepository(Profile) private readonly profilesRepository: Repository<Profile>,
     private notificationService: NotificationService,
   ){}
 
@@ -167,6 +169,12 @@ export class AgencyService {
               await this.usersRepository.save(dstUser);
               await this.notificationService.OnSentInvite(user, inviteObj, agency)
 
+              const profile = await this.profilesRepository.findOneBy({
+                id: dstUser.profileId,
+              })
+              profile.verified = true;
+              await this.profilesRepository.save(profile);
+
               return data;
             }
           );
@@ -233,6 +241,12 @@ export class AgencyService {
               user.agencyId = null;
               user.role = Role.Regular
               await this.usersRepository.save(user);
+
+              const profile = await this.profilesRepository.findOneBy({
+                id: user.profileId,
+              })
+              profile.verified = false;
+              await this.profilesRepository.save(profile);
 
               return data;
             }
