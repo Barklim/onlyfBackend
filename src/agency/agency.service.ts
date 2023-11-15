@@ -23,12 +23,12 @@ export class AgencyService {
 
   async findMe(token: string) {
     try {
-      const refreshTokenData = jwt.decode(token) as { email: string };
-      const email = refreshTokenData.email;
-      const user = await this.usersRepository.findOneBy({
-        email: email,
+      const refreshTokenData = jwt.decode(token) as { sub: string };
+      const sub = refreshTokenData.sub;
+      const agency = await this.agenciesRepository.findOneBy({
+        ownerId: sub,
       })
-      return user;
+      return agency;
     } catch (err) {
       const pgUniqueViolationErrorCode = '23505';
       if (err.code === pgUniqueViolationErrorCode) {
