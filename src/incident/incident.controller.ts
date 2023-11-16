@@ -10,15 +10,16 @@ export class IncidentController {
     return 'incident controller working';
   }
 
-  @Get(':id')
+  @Get('report')
   findAll(
-    @Param('id') id: string,
     @Query('startDate') startDate: string,
     @Query('endDate') endDate: string,
+    @Query('ofId') ofId: string,
+    @Query('managerId') managerId: string,
   ) {
     const parsedStartDate = new Date(startDate);
     const parsedEndDate = new Date(endDate);
 
-    return this.incidentService.findAll(id, parsedStartDate, parsedEndDate);
+    return this.incidentService.findAll(ofId, managerId, parsedStartDate, parsedEndDate);
   }
 }

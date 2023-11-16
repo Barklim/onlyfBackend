@@ -19,12 +19,16 @@ import {
 import { OtpAuthenticationService } from './opt-authentication/opt-authentication.service';
 import { NotificationService } from '../../notification/notification.service';
 import { Profile } from '../../profile/entities/profile.entities';
+import { Agency } from '../../agency/entities/agency.entity';
+import { Plan } from '../../agency/enums/agency.enum';
+import { Role } from '../../users/enums/role.enum';
 
 @Injectable()
 export class AuthenticationService {
   constructor(
     @InjectRepository(User) private readonly usersRepository: Repository<User>,
     @InjectRepository(Profile) private readonly profilesRepository: Repository<Profile>,
+    @InjectRepository(Agency) private readonly agenciesRepository: Repository<Agency>,
     private readonly hashingService: HashingService,
     private readonly jwtService: JwtService,
     @Inject(jwtConfig.KEY)
@@ -60,6 +64,24 @@ export class AuthenticationService {
         avatar: savedUser.avatar,
         jsonSettings: savedUser.jsonSettings,
       };
+
+      if (signUpDto.agencyName === undefined || signUpDto.agencyName === '') {
+      } else {
+        const agency = new Agency();
+        agency.ownerId = user.id;
+        agency.name = signUpDto.agencyName;
+        agency.plan = Plan.Free;
+
+        await this.agenciesRepository.save(agency).then(
+          (data) => {
+            user.role = Role.Admin;
+            user.roles = [Role.Admin];
+            user.agencyId = data.id;
+            this.usersRepository.save(user);
+            return data;
+          }
+        )
+      }
 
       await this.notificationService.OnSignUp(savedUser.id);
 

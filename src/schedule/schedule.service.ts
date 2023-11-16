@@ -17,7 +17,7 @@ export class ScheduleService {
     private readonly notificationService: NotificationService
   ){}
 
-  @Cron('*/60 * * * * *')
+  @Cron('*/10 * * * * *')
   // @Cron('* * */10 * * *')
   async handleCron() {
     console.log('chron handleCron');
@@ -33,8 +33,11 @@ export class ScheduleService {
         id: message.agencyId,
       });
       const timeDelay = agency.userTimeConstraint[message.ofId];
+      const delay = timeDelay === undefined ? 1000*60*10 : timeDelay;
 
+      // console.log('message.id');
       // console.log(message.id);
+      // console.log(agency);
       // console.log(timeDelay);
       // console.log('Created:');
       // console.log(message.msg_created_at);
@@ -43,7 +46,7 @@ export class ScheduleService {
       // console.log(msgCreatedAt < new Date(currentTime.getTime() - timeDelay));
       // console.log('');
 
-      return msgCreatedAt < new Date(currentTime.getTime() - timeDelay);
+      return msgCreatedAt < new Date(currentTime.getTime() - delay);
     }));
 
     const preparedArr = messages
@@ -66,6 +69,12 @@ export class ScheduleService {
       incident.type = TIncident.Message;
       incident.agencyId = message.agencyId;
       incident.stopWords = '';
+      incident.managerId = message.managerId;
+
+      let createdDate = new Date();
+      createdDate.setHours(createdDate.getHours() + 8);
+      incident.incident_created_at = createdDate.toISOString();
+
       await this.incidentsRepository.save(incident).then(async (data) => {
         await this.messagesRepository.save(message);
       });

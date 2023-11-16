@@ -17,6 +17,6 @@ export class CreateMessageDto {
   text: string;
 
   @IsNotEmpty()
-  agencyId: number;
+  agencyId: string;
 }
 

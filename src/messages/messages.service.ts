@@ -66,6 +66,7 @@ export class MessagesService {
           newMessage.agencyId = user.agencyId;
           newMessage.text = message.text.substring(0, 30);
           newMessage.isRead = message.isRead
+          newMessage.managerId = user.id;
 
           await this.messagesRepository.save(newMessage);
         } else {

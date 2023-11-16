@@ -1,4 +1,4 @@
-import { IsEmail, MinLength } from 'class-validator';
+import { IsEmail, IsOptional, MinLength } from 'class-validator';
 import { TUserFeatures, TUserJsonSettings } from '../../../../users/enums/user.settings';
 
 export class SignUpDto {
@@ -8,6 +8,8 @@ export class SignUpDto {
   @MinLength(10)
   password: string;
 
+  @IsOptional()
+  agencyName: string;
 }
 
 export interface SignUpResponse {

@@ -9,8 +9,11 @@ export class Incident {
   @Column()
   ofId: string;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   created_at: Date;
+
+  @Column()
+  incident_created_at: string;
 
   @Column({unique: false})
   msgId: string | null;
@@ -23,6 +26,9 @@ export class Incident {
 
   @Column()
   agencyId: string;
+
+  @Column()
+  managerId: string;
 
   @Column({default: false})
   isCounted: boolean;

@@ -19,14 +19,20 @@ export class Message {
   @Column()
   msg_created_at: string;
 
+  // Onlyf
   @Column({unique: true})
   msgId: string;
 
+  // Onlyf
   @Column()
   fromUserId: string;
 
+  // Onlyf
   @Column()
   chatId: string;
+
+  @Column()
+  managerId: string;
 
   @Column()
   agencyId: string;

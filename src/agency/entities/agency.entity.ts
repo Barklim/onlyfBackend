@@ -3,7 +3,7 @@ import { Invite, Plan, UserTimeConstraint } from '../enums/agency.enum';
 
 @Entity()
 export class Agency {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @CreateDateColumn()

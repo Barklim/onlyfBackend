@@ -64,6 +64,7 @@ export class AgencyService {
         return await this.agenciesRepository.save(newAgency).then(
           (data) => {
             user.role = Role.Admin;
+            user.roles = [Role.Admin];
             user.agencyId = newAgency.id;
             this.usersRepository.save(user);
             return data;
@@ -240,6 +241,7 @@ export class AgencyService {
               user.invitedTo = null;
               user.agencyId = null;
               user.role = Role.Regular
+              user.roles = [Role.Regular]
               await this.usersRepository.save(user);
 
               const profile = await this.profilesRepository.findOneBy({
@@ -318,6 +320,7 @@ export class AgencyService {
               async (data) => {
 
                 user.role = existingInvite.role;
+                user.roles = [existingInvite.role]
                 user.agencyId = agency.id;
                 await this.usersRepository.save(user);
                 await this.notificationService.OnAcceptInvite(user, existingInvite, agency)
