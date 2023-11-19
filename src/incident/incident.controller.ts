@@ -17,8 +17,8 @@ export class IncidentController {
     @Query('ofId') ofId: string,
     @Query('managerId') managerId: string,
   ) {
-    const parsedStartDate = new Date(startDate);
-    const parsedEndDate = new Date(endDate);
+    const parsedStartDate = startDate ? new Date(startDate) : null;
+    const parsedEndDate = endDate ? new Date(endDate) : null;
 
     return this.incidentService.findAll(ofId, managerId, parsedStartDate, parsedEndDate);
   }

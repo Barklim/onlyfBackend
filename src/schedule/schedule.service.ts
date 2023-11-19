@@ -72,7 +72,7 @@ export class ScheduleService {
       incident.managerId = message.managerId;
 
       let createdDate = new Date();
-      createdDate.setHours(createdDate.getHours() + 8);
+      createdDate.setHours(createdDate.getHours());
       incident.incident_created_at = createdDate.toISOString();
 
       await this.incidentsRepository.save(incident).then(async (data) => {

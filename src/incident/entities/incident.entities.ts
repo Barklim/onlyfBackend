@@ -32,4 +32,7 @@ export class Incident {
 
   @Column({default: false})
   isCounted: boolean;
+
+  @Column({default: ''})
+  workShift?: string;
 }
