@@ -6,6 +6,7 @@ import { CreateMessageDto } from './dto/create-message.dto';
 import { UpdateMessageDto } from './dto/update-message.dto';
 import * as jwt from 'jsonwebtoken';
 import { User } from '../users/entities/user.entity';
+import { subHours, format } from 'date-fns';
 
 @Injectable()
 export class MessagesService {
@@ -93,7 +94,16 @@ export class MessagesService {
     return existingMessage;
   }
 
-  async findActiveDialogs(id: string, startDate: Date, endDate: Date, mc: number, uc: number): Promise<{ totalFromModel: number, totalFromUser: number, totalActive: number, chats: any[] }> {
+  async findAllBy(managerId: string) {
+    const findObj = {}
+    if (managerId) { findObj['managerId'] = managerId }
+
+    const existingMessage = await this.messagesRepository.findBy(findObj);
+
+    return existingMessage;
+  }
+
+  async findActiveDialog(id: string, startDate: Date, endDate: Date, mc: number, uc: number): Promise<{ totalFromModel: number, totalFromUser: number, totalActive: number, chats: any[] }> {
     const existingMessages: Message[] = await this.messagesRepository.findBy({
       ofId: id,
     });
@@ -112,6 +122,7 @@ export class MessagesService {
           isActive: false
         };
       }
+
 
       if (message.fromUserId === id) {
         result[message.chatId].fromModel++;
@@ -141,6 +152,81 @@ export class MessagesService {
       totalActive: sumObject.totalActive,
       chats,
     };
+  }
+
+  async findActiveDialogs(id: string, mc: number, uc: number, tz: number): Promise<{ date: string, dayOfYear: string, type: number, totalFromModel: number, totalFromUser: number, totalActive: number, chats: any[] }[]> {
+    const existingMessages: Message[] = await this.messagesRepository.findBy({
+      ofId: id,
+    });
+
+    const filteredMessages: Message[] = existingMessages;
+
+    const groupedMessages: Record<string, { dayOfYear: string, type: number, chatId: string, fromModel: number, fromUser: number, isActive: boolean }[]> = filteredMessages.reduce((result, message) => {
+      const messageDateInit = new Date(message.msg_created_at);
+      const messageDate = subHours(messageDateInit, tz);
+
+      const type = Math.ceil((messageDate.getHours() + 1) / 8);
+
+      const startOfYear = new Date(messageDate.getFullYear(), 0, 1);
+      const diffInDays = Math.floor((messageDate.getTime() - startOfYear.getTime()) / (24 * 60 * 60 * 1000)) + 1;
+      const dayOfYear = diffInDays < 10 ? '0' + diffInDays : diffInDays.toString();
+
+      if (!result[messageDate.toISOString().split('T')[0]]) {
+        result[messageDate.toISOString().split('T')[0]] = [];
+      }
+
+      const existingChat = result[messageDate.toISOString().split('T')[0]].find(chat => chat.chatId === message.chatId);
+
+      if (!existingChat) {
+        const newChat = {
+          type,
+          chatId: message.chatId,
+          fromModel: 0,
+          fromUser: 0,
+          isActive: false,
+        };
+        result[messageDate.toISOString().split('T')[0]].push({ dayOfYear, ...newChat });
+      }
+
+      const chatToUpdate = result[messageDate.toISOString().split('T')[0]].find(chat => chat.chatId === message.chatId);
+
+      chatToUpdate.dayOfYear = Number(dayOfYear);
+
+      if (message.fromUserId === id) {
+        chatToUpdate.fromModel++;
+      } else {
+        chatToUpdate.fromUser++;
+      }
+
+      if (chatToUpdate.fromModel >= mc && chatToUpdate.fromUser >= uc) {
+        chatToUpdate.isActive = true;
+      }
+
+      return result;
+    }, {});
+
+    const resultArray: { date: string, dayOfYear: string, type: number, totalFromModel: number, totalFromUser: number, totalActive: number, chats: any[] }[] = [];
+
+    for (const [date, chats] of Object.entries(groupedMessages)) {
+      const sumObject = chats.reduce((result, chat) => {
+        result.totalFromModel = (result.totalFromModel || 0) + chat.fromModel;
+        result.totalFromUser = (result.totalFromUser || 0) + chat.fromUser;
+        result.totalActive = chat.isActive ? result.totalActive + 1 : result.totalActive;
+        return result;
+      }, { totalFromModel: 0, totalFromUser: 0, totalActive: 0 });
+
+      resultArray.push({
+        date,
+        dayOfYear: chats[0].dayOfYear,
+        type: chats[0].type,
+        totalFromModel: sumObject.totalFromModel,
+        totalFromUser: sumObject.totalFromUser,
+        totalActive: sumObject.totalActive,
+        chats,
+      });
+    }
+
+    return resultArray;
   }
 
 }

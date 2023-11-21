@@ -37,6 +37,11 @@ export class MessagesController {
     return this.messageService.findAll(id);
   }
 
+  @Get('all/')
+  findAllBy(@Query('managerId') managerId: string) {
+    return this.messageService.findAllBy(managerId);
+  }
+
   @Get('activeDialog/:id')
   findActiveDialogs(
     @Param('id') id: string,
@@ -50,7 +55,17 @@ export class MessagesController {
     const parsedStartDate = new Date(startDate);
     const parsedEndDate = new Date(endDate);
 
-    return this.messageService.findActiveDialogs(id, parsedStartDate, parsedEndDate, Number(mc), Number(uc));
+    return this.messageService.findActiveDialog(id, parsedStartDate, parsedEndDate, Number(mc), Number(uc));
+  }
+
+  @Get('activeDialogs/:id')
+  findActiveDialogs1(
+    @Param('id') id: string,
+    @Query('mc') mc: string,
+    @Query('uc') uc: string,
+    @Query('tz') tz: string,
+  ) {
+    return this.messageService.findActiveDialogs(id, Number(mc), Number(uc), Number(tz));
   }
 
   @Patch(':id')
