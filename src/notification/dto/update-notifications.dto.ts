@@ -11,3 +11,7 @@ export type UpdateNotificationsRequestData = Array<UpdateNotificationsRequestIte
 export type UpdateNotificationsResponseData = {
   notifications: NotificationsSettings,
 };
+
+export type UpdateVisibleRequestData = {
+  isVisible: boolean,
+};

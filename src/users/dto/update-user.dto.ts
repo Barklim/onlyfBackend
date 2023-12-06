@@ -8,6 +8,9 @@ export class UpdateUserDto {
   isAccountsPageWasOpened?: boolean;
 
   @IsOptional()
+  isCookieDefined?: boolean;
+
+  @IsOptional()
   isArticlesPageWasOpened?: boolean;
 
   @IsOptional()
@@ -15,4 +18,7 @@ export class UpdateUserDto {
 
   @IsOptional()
   features?: TUserFeatures;
+
+  @IsOptional()
+  isVisible?: boolean;
 }

@@ -76,6 +76,7 @@ export class User {
           [NotificationsSource.INFO]: true,
         },
       },
+      isVisible: false
     } as TUserSettings,
   })
   settings: TUserSettings;
@@ -109,6 +110,7 @@ export class User {
       "isArticlesPageWasOpened": false,
       "theme": 'app_orange_theme',
       "isAccountsPageWasOpened": false,
+      "isCookieDefined": false
     } as TUserJsonSettings,
   })
   jsonSettings: TUserJsonSettings;

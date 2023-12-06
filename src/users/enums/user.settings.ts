@@ -20,6 +20,7 @@ export type NotificationsSettingsItem = {
 
 export type TUserSettings = {
   notifications: NotificationsSettings,
+  isVisible: boolean
 };
 
 export type TUserFeatures = {

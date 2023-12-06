@@ -1,3 +1,93 @@
+kliment.barkalov@gmail.com
+klim.barkalov@mail.ru
+suser@gmail.com
+test@mail.ru
+123123456456
+
+tab справа/принять приглашение/ мое агенство чекбокс
+похоже notificationscount почему-то ререндерит все приложение 
+user.lastActivity 2023-12-02T02:21:27.348Z
+user.emailConfirmedDate
+//
+How to bypass reCAPTCHA with Puppeteer and Headless Chrome
+https://www.youtube.com/watch?v=wsDRkAD6lPs&list=WL&index=20&t=5s&ab_channel=JarrodOverson
+//
+https://docs.google.com/document/d/1AzK-DPn4afeKjbFumDeF8AAt43GbS3MwgyBkyZNAR70/edit?copiedFromTrash
+
+await get("UserRepository").update({ id: 'fac32de4-6e21-4ba2-a312-865d2b20b98c' }, { role: 'admin' })
+
+npm run start -- --entryFile repl
+
+await get("UserRepository").find();
+await get("UserRepository").findOne({ where: { id: 10 }})
+await get("UserRepository").update({ id: '9cf0703c-31ad-495c-85f7-b95c1d2055c8' }, { role: 'superuser' })
+await get("UserRepository").update({ id: '0ab948f6-2947-486b-9171-a105867628fe' }, { online: false })
+await get("UserRepository").update({ id:  10 }, { roles: ['admin'] })
+await get("UserRepository").update({ id:  9 }, { roles: ['model', 'regular'] })
+await get("UserRepository").update({ id:  11 }, { roles: ['admin', 'regular', 'manager'] })
+await get("UserRepository").update({ id:  10 }, { roles: ['regular', 'manager'] })
+await get("UserRepository").update({ id: '0ab948f6-2947-486b-9171-a105867628fe' }, { roles: ['model'] })
+await get("UserRepository").update({ id: '0ab948f6-2947-486b-9171-a105867628fe' }, { role: 'model' })
+await get("UserRepository").query(`
+  UPDATE "user"
+  SET settings = jsonb_set(settings, '{isVisible}', 'true'::jsonb)
+  WHERE id = '9cf0703c-31ad-495c-85f7-b95c1d2055c8'
+`);
+await get("UserRepository").clear();
+await get("ApiKeyRepository").find();
+await get("ApiKeyRepository").clear();
+//
+await get("UserRepository").query('TRUNCATE TABLE "user" CASCADE');
+await get("ApiKeyRepository").query('DELETE FROM "api_key"');
+await get("UserRepository").clear();
+//
+await get("ProfileRepository").find()
+await get("ProfileRepository").findOne({ where: { id: 23 }})
+await get("ProfileRepository").findOne({ where: { id: 23 }})
+await get("ProfileRepository").update({ id:  23 }, { verified: false })
+await get("ProfileRepository").update({ id:  23 }, { username: 'test' }) // 6
+await get("ProfileRepository").update({ id: 8 }, { username: 'test klim' }) // 5
+await get("ProfileRepository").update({ id:  7 }, { online: true }) // 6
+await get("ProfileRepository").update({ id: 9 }, { online: true }) // 5
+// 49  54
+await get("ProfileRepository").update({ id:  49 }, { isVisible: true })
+//
+await get("ProfileRepository").query('TRUNCATE TABLE "profile" CASCADE');
+await get("UserRepository").query('DELETE FROM "profileId"');
+await get("ProfileRepository").clear()
+
+await get("ScrapperRepository").find()
+await get("ScrapperRepository").update({ id: 5 }, { status: 'offline' })
+
+await get("AgencyRepository").delete({ id: 17 })
+await get("AgencyRepository").find()
+await get("AgencyRepository").clear()
+
+await get("NotificationRepository").find()
+await get("NotificationRepository").clear();
+
+
+await get("MessageRepository").find()
+await get("MessageRepository").find({ id: 40  })
+await get("MessageRepository").delete({ id: 3 })
+await get("MessageRepository").clear()
+
+await get("IncidentRepository").find()
+await get("IncidentRepository").findOne({ where: { msgId: '2120383370444a01114' }})
+await get("IncidentRepository").update({ id:  124 }, { incident_created_at: '2023-11-19T00:01:06.531Z' })
+await get("IncidentRepository").update({ id: 111 }, { incident_created_at: '2023-11-18T00:01:10.032Z' })
+await get("IncidentRepository").update({ msgId: '2120383370444a01114' }, { incident_created_at: '2023-11-18T23:59:40.080Z' })
+await get("IncidentRepository").delete({ id: 98 })
+await get("IncidentRepository").clear()
+
+await get("ProfileRepository").delete()
+await get("ProfileRepository").query(`DROP TABLE IF EXISTS ProfileRepository`);
+await get("ProfileRepository").query(`DROP TABLE IF EXISTS Profile`);
+await get("ProfileRepository").query(`DROP TABLE IF EXISTS ProfileRepository`);
+await get("UserRepository").query(`DROP TABLE IF EXISTS UserRepository`);
+
+
+
 до диалогов первая
 скоро, стоп слова
 2-3 недели
@@ -13,6 +103,31 @@ unreadMessageCount
 
 docker run --name postgres -e POSTGRES_PASSWORD=pass123 -e POSTGRES_DB=postgres -p 5432:5432 -d postgres
 
+
+
+## TODO
+
+todo доделать ui нотификаций
+https://mui.com/material-ui/react-snackbar/#customization
+
+получить агенство на странице профиля, для того чтобы можно было выставлять настройки времени.
+указывать в карточке email пользователя для админов
+//
+showtutorial
+
+search 
+entitymanager typeorm
+проверить все методы на доступы к апи
+удалить сервисы нотификаций по ролям
+Проблемы с roles
+https://www.businessinsider.com/how-to-start-an-onlyfans-without-followers
+https://telegra.ph/Paru-slov-pro-OnlyFans-agentstva-07-21#:~:text=%D0%9E%D0%BD%D0%BB%D0%B8%D1%84%D0%B0%D0%BD%D1%81%2D%D0%B0%D0%B3%D0%B5%D0%BD%D1%82%D1%81%D1%82%D0%B2%D0%B0%20%2D%20%D1%8D%D1%82%D0%BE%20%D0%BA%D0%BE%D0%BC%D0%BF%D0%B0%D0%BD%D0%B8%D0%B8%2C,18%2B%20%D0%B7%D0%B0%D1%80%D0%B0%D0%B1%D0%B0%D1%82%D1%8B%D0%B2%D0%B0%D1%82%D1%8C%20%D0%B4%D0%B5%D0%BD%D1%8C%D0%B3%D0%B8%20%D0%BD%D0%B0%20OnlyFans.
+https://www.google.com/search?q=+dialog+icon&tbm=isch&ved=2ahUKEwjMiKeRhs6BAxXJm2MGHdHnBtQQ2-cCegQIABAA&oq=+dialog+icon&gs_lcp=CgNpbWcQAzIHCAAQigUQQzIFCAAQgAQyBQgAEIAEMgYIABAHEB4yBggAEAcQHjIGCAAQBxAeMgYIABAHEB4yBggAEAcQHjIGCAAQBxAeMgYIABAHEB46BAgjECdQxAxYxAxg0g5oAHAAeACAAUKIAYEBkgEBMpgBAKABAaoBC2d3cy13aXotaW1nwAEB&sclient=img&ei=DdUVZYzOEMm3juMP0c-boA0&bih=879&biw=1920
+https://www.google.com/search?q=in+maintenance+material+ui+component&tbm=isch&ved=2ahUKEwiE85yqyMqBAxUAz6ACHU6nCEsQ2-cCegQIABAA&oq=in+maintenance+material+ui+component&gs_lcp=CgNpbWcQA1DKCVihEGDPEWgAcAB4AIABgAGIAegCkgEDMy4xmAEAoAEBqgELZ3dzLXdpei1pbWfAAQE&sclient=img&ei=lwEUZcTLE4Ceg8UPzs6i2AQ&bih=847&biw=1920#imgrc=jByPuyYSsGKU1M
+pricing
+https://mui.com/material-ui/getting-started/templates/
+grpc
+https://coursehunter.net/course/grpc-node-js-master-klass-sozdanie-sovremennyh-api-i-mikroservisov
 
 
 
@@ -77,8 +192,33 @@ Summary:
 время настраиваемое
 
 
+## description
 
+OnlyFans Tracker (OFTracker) для операторов +ChatGpt , представляет из себя:
+chrome extension, 
+react приложение,
+nest js бэкенд, 
+json-server для мока данных во время разработки клиентского приложения. 
+Оператор имеет доступ к n-му количеству аккаунтов сервиса only fans (OF). Скачивает расширение из веб приложения и устанавливает в браузере Dolphin. Оператор регистрируется либо, если аккаунт создан авторизуется в расширении и далее расширение собирает статистику по работе оператора и имеет дополнительные функционал. Вот некоторые фичи:
+1. Cлежение за скоростью ответа в месенджере OF. При нарушении, то есть слишком долгом ответе условно 15 минут, это идет в статистику нарушений, со всей информацией о событии.
+2. Блокировка инпута ввода в OF в случае введения запретного слова. Запретные слова настраиваются админом в настройках веб приложения. Слово и связанная с событием информация идет в статистику нарушений. Каждый n-ый запрос имеет интеграцию с ChatGpt с промптом на агрессию и соответствие качествам характера модели.
+3. Как и в клиентском приложении показывается online status оператора о сборе статистики.
+4. Сбор статистики активных диалогов, информации о пользователях, массовых рассылках и финансах, возвратах.
 
+Бэкенд.
+Каждый админ связан со своими операторами и может настроить стоп слова и время отклика оператора на сообщения в OF. Пользователь с ролью админ может связать себя с оператом отправкой инвайта в приложении. Когда произошла 2х стороння привязка и аккаунт верфифицирован админом, с этого момента авторизованным оператором в OFTracker extension собирается статистика. Доступ к ресурсам реализован с помощью подхода role based access control. 
+Безопасность включает в себя:
+1. JWT авторизация через ротацию пары access, refresh токенов.
+2. invalidate tokens. automatic reuse detection
+3. 2-3хфактурную авторизацию по стратегии почты или скана qr code. Для оператора верификация по почте, для админа дополнительно по qr code. 
+
+В качестве базы данных выбран redis, так как приложение предпологает система очередей сообщений, быстрая и надежная система кэша, а также TTL, для некоторых программных сущностей. C другой же стороны приложение не предпологает сложных динамических данных.
+
+Клиентское приложение  Поддерживается темизация и интерационализация приложения.
+Технология Material UI, Redux RTK, feature sliced design e.t.c.
+OFTracker fronted позволяет следить за своей статистикой операторам и статистикой моделей и оператовров админами. 
+Админы могут следить за активностью и статистикой своих операторов и моделей. Админ имеет доступ ко всем привязанным пользователям с ролью user и manager и имеет доступ к чтению и изменению данных в профиле. Админ присваивает пользователям с ролью модели id из onlyfans в профиле пользователя с целью привязки модели пользователя ‘модель’ к id моделей из сервиса OF.
+Админы могут привязать к себе оператора и в дальнейшем верифицировать или отменить верификацию оператора с целью доступа к сбору статистики в OFTracker extension.
 
 
 ## extension

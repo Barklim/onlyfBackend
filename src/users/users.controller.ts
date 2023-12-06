@@ -59,8 +59,10 @@ export class UsersController {
     return this.usersService.update(id, updateUserDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.usersService.remove(id);
+  @Delete('')
+  remove(@Req() request: Request) {
+    const tokenParts = request.headers.authorization.split(' ');
+
+    return this.usersService.remove(tokenParts[1]);
   }
 }

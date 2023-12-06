@@ -62,6 +62,9 @@ export class UsersService {
       query.andWhere('user.roles @> :roles', { roles: rolesArray });
     }
 
+    // query.andWhere('profile.isVisible = :isVisible', { isVisible: true });
+    query.andWhere("user.settings @> :settings", { settings: { isVisible: true } });
+
     const users = await query.getMany();
 
     if (_expand) {
@@ -150,8 +153,18 @@ export class UsersService {
       id: id,
     })
 
+    if (updateUserDto.isVisible !== undefined) {
+      user.settings.isVisible = updateUserDto.isVisible;
+    }
+
     if (updateUserDto.isAccountsPageWasOpened !== undefined) {
       user.jsonSettings['isAccountsPageWasOpened'] = updateUserDto.isAccountsPageWasOpened;
+    }
+    if (updateUserDto.isCookieDefined !== undefined) {
+      user.jsonSettings['isCookieDefined'] = updateUserDto.isCookieDefined;
+    }
+    if (updateUserDto.theme !== undefined) {
+      user.jsonSettings['theme'] = updateUserDto.theme;
     }
     if (updateUserDto.isArticlesPageWasOpened !== undefined) {
       user.jsonSettings['isArticlesPageWasOpened'] = updateUserDto.isArticlesPageWasOpened;
@@ -175,7 +188,20 @@ export class UsersService {
     return  await this.usersRepository.save(user);
   }
 
-  remove(id: string) {
-    return `This action removes a #${id} user`;
+  async remove(token: string) {
+    const refreshTokenData = jwt.decode(token) as any;
+    const email = refreshTokenData.email;
+    const user = await this.usersRepository.findOneBy({
+      email: email,
+    });
+
+    const profile = await this.profilesRepository.findOneBy({
+      id: user.profileId,
+    });
+
+    user ? this.usersRepository.remove(user) : null;
+    profile ? this.profilesRepository.remove(profile) : null;
+
+    return user;
   }
 }
