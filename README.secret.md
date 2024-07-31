@@ -4,15 +4,32 @@ suser@gmail.com
 test@mail.ru
 123123456456
 
-tab справа/принять приглашение/ мое агенство чекбокс
+принять приглашение/ мое агенство чекбокс/ storybook host
+Remember me ?
 похоже notificationscount почему-то ререндерит все приложение 
 user.lastActivity 2023-12-02T02:21:27.348Z
 user.emailConfirmedDate
+//
+- **Data fetching**: `miragejs`, `faker`
 //
 How to bypass reCAPTCHA with Puppeteer and Headless Chrome
 https://www.youtube.com/watch?v=wsDRkAD6lPs&list=WL&index=20&t=5s&ab_channel=JarrodOverson
 //
 https://docs.google.com/document/d/1AzK-DPn4afeKjbFumDeF8AAt43GbS3MwgyBkyZNAR70/edit?copiedFromTrash
+//
+https://mangoai.co/    bot
+https://quickqr.art/
+https://www.adultaitools.com/tools/chatpersona-ai
+https://chromewebstore.google.com/detail/onlyfans-ai-chat-tool-cha/bgefplnmcbmcfjmggpjiadldmfiiecma
+https://www.fanvue.com/
+//
+https://freelance.habr.com/tasks/515565
+//
+asdf1234
+kliment.barkalov@gmail.com
+test123123@gmail.com
+//
+как установить расширение с мобильного
 
 await get("UserRepository").update({ id: 'fac32de4-6e21-4ba2-a312-865d2b20b98c' }, { role: 'admin' })
 
@@ -120,6 +137,16 @@ entitymanager typeorm
 проверить все методы на доступы к апи
 удалить сервисы нотификаций по ролям
 Проблемы с roles
+https://www.creatorhero.com/
+https://www.creatorhero.com/old-home
+https://getbotly.com/
+https://www.adultcreator.co/best-onlyfans-management-softwares/
+//
+ui
+https://www.gptgirlfriend.online/
+https://gravity-ui.com/
+https://cloud.yandex.com/en/services/datalens
+//
 https://www.businessinsider.com/how-to-start-an-onlyfans-without-followers
 https://telegra.ph/Paru-slov-pro-OnlyFans-agentstva-07-21#:~:text=%D0%9E%D0%BD%D0%BB%D0%B8%D1%84%D0%B0%D0%BD%D1%81%2D%D0%B0%D0%B3%D0%B5%D0%BD%D1%82%D1%81%D1%82%D0%B2%D0%B0%20%2D%20%D1%8D%D1%82%D0%BE%20%D0%BA%D0%BE%D0%BC%D0%BF%D0%B0%D0%BD%D0%B8%D0%B8%2C,18%2B%20%D0%B7%D0%B0%D1%80%D0%B0%D0%B1%D0%B0%D1%82%D1%8B%D0%B2%D0%B0%D1%82%D1%8C%20%D0%B4%D0%B5%D0%BD%D1%8C%D0%B3%D0%B8%20%D0%BD%D0%B0%20OnlyFans.
 https://www.google.com/search?q=+dialog+icon&tbm=isch&ved=2ahUKEwjMiKeRhs6BAxXJm2MGHdHnBtQQ2-cCegQIABAA&oq=+dialog+icon&gs_lcp=CgNpbWcQAzIHCAAQigUQQzIFCAAQgAQyBQgAEIAEMgYIABAHEB4yBggAEAcQHjIGCAAQBxAeMgYIABAHEB4yBggAEAcQHjIGCAAQBxAeMgYIABAHEB46BAgjECdQxAxYxAxg0g5oAHAAeACAAUKIAYEBkgEBMpgBAKABAaoBC2d3cy13aXotaW1nwAEB&sclient=img&ei=DdUVZYzOEMm3juMP0c-boA0&bih=879&biw=1920
